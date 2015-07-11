@@ -1,2 +1,3 @@
 # usi4biz
-A Traceability Approach Linking Business to Users
+
+http://www.usi4biz.org
