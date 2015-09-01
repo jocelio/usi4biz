@@ -1,23 +1,22 @@
 (ns usi4biz.handler
-  (:require [compojure.core :refer [defroutes routes]]
-            [ring.middleware.resource :refer [wrap-resource]]
-            [ring.middleware.file-info :refer [wrap-file-info]]
-            [hiccup.middleware :refer [wrap-base-url]]
-            [compojure.handler :as handler]
-            [compojure.route :as route]
-            [usi4biz.routes.home :refer [home-routes]]))
+  (:require [compojure.core           :refer :all]
+            [compojure.route          :as route]
+            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
+            [usi4biz.datasource       :as ds]
+            [usi4biz.routes.web-api   :refer [api-routes]]))
 
 (defn init []
-  (println "usi4biz is starting"))
+  (println "FA7 is starting..."))
+;  (ds/migrate-db))
 
 (defn destroy []
-  (println "usi4biz is shutting down"))
+  (println "FA7 is stopping...")
+  (ds/close))
 
 (defroutes app-routes
-  (route/resources "/")
-  (route/not-found "Not Found"))
+  (GET "/" []
+       (str "<h1>" (slurp "https://api.github.com/zen") "</h1>"))
+  (route/not-found "<h2>Not Found</h2>"))
 
 (def app
-  (-> (routes home-routes app-routes)
-      (handler/site)
-      (wrap-base-url)))
+  (-> (routes api-routes app-routes)))

@@ -1,0 +1,15 @@
+{:auto-commit        true
+ :read-only          false
+ :connection-timeout 30000
+ :validation-timeout 5000
+ :idle-timeout       600000
+ :max-lifetime       1800000
+ :minimum-idle       10
+ :maximum-pool-size  10
+ :pool-name          "db-pool"
+ :adapter            "mysql"
+ :database-name      "usi4biz"
+ :username           "usi4biz_usr"
+ :password           "secret"
+ :server-name        "localhost"
+ :port-number        3306}
