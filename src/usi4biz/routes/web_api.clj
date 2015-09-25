@@ -1,18 +1,18 @@
 (ns usi4biz.routes.web-api
   (:require [clojure.data.json :as json]
-            [usi4biz.models.server :as server]
+            [usi4biz.models.person :as person]
             [compojure.core    :refer [context defroutes GET]]
             [liberator.core    :refer [defresource]]))
 
-(defresource servers []
+(defresource persons []
   :available-media-types ["application/json"]
-  :handle-ok (fn [_] (json/write-str (server/find-all-servers))))
+  :handle-ok (fn [_] (json/write-str (person/find-all-persons))))
 
-(defresource server [id]
+(defresource person [id]
   :available-media-types ["application/json"]
-  :handle-ok (fn [_] (json/write-str (server/find-server id))))
+  :handle-ok (fn [_] (json/write-str (person/find-person id))))
 
 (defroutes api-routes
-  (context "/api/servers" []
-    (GET "/"    []   (servers))
-    (GET "/:id" [id] (server id))))
+  (context "/api/persons" []
+    (GET "/"    []   (persons))
+    (GET "/:id" [id] (person id))))

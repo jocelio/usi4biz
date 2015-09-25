@@ -8,10 +8,11 @@ create table product (
 alter table product add constraint pk_product primary key (id);
 
 create table milestone (
-  id       char(32)     not null,
-  product  char(32)     not null,
-  name     varchar(100)     null,
-  deadline date             null
+  id          char(32)     not null,
+  product     char(32)     not null,
+  name        varchar(100)     null,
+  description text             null,
+  due_date    date             null
 ) engine = innodb;
 
 alter table milestone add constraint pk_milestone primary key (id);
@@ -29,6 +30,6 @@ create table issue (
 ) engine = innodb;
 
 alter table issue add constraint pk_issue primary key (id);
-alter table issue add constraint fk_assignee_issue foreign key (assignee) references user_account (id) on delete set null;
+alter table issue add constraint fk_assignee_issue foreign key (assignee) references person (id) on delete set null;
 alter table issue add constraint fk_product_issue foreign key (product) references product (id) on delete cascade;
-alter table issue add constraing fk_milestone_issue foreign key (milestone) references milestone (id) on delete set null;
+alter table issue add constraint fk_milestone_issue foreign key (milestone) references milestone (id) on delete set null;
