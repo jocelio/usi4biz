@@ -6,11 +6,11 @@
             [usi4biz.routes.web-api   :refer [api-routes]]))
 
 (defn init []
-  (println "FA7 is starting...")
+  (println "Usi4Biz is starting...")
   (ds/migrate-db))
 
 (defn destroy []
-  (println "FA7 is stopping...")
+  (println "Usi4Biz is stopping...")
   (ds/close))
 
 (defroutes app-routes

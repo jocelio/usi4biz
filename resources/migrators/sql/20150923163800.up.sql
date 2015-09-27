@@ -16,11 +16,12 @@ create table milestone (
 ) engine = innodb;
 
 alter table milestone add constraint pk_milestone primary key (id);
-alter table milestone add constraint fk_product_milestone foreign key (product) references milestone (id) on delete cascade;
+alter table milestone add constraint fk_product_milestone foreign key (product) references product (id) on delete cascade;
 
 create table issue (
   id          char(32)     not null,
   product     char(32)     not null,
+  reference   varchar(20)  not null,
   name        varchar(255) not null,
   milestone   char(32)         null,
   description text             null,
