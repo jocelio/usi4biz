@@ -3,7 +3,7 @@
             [clojure.java.jdbc  :as jdbc]
             [usi4biz.datasource :as ds]))
 
-(defrecord user-account [id name github-id])
+(defrecord user-account [id username])
 
 (defn find-all-accounts []
  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
@@ -15,7 +15,7 @@
     (let [rows (jdbc/query conn ["select * from user_account where name = ?" name])]
       rows)))
 
-(defn find-by-githugid [github-id]
-  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
-    (let [rows (jdbc/query conn ["select * from user_account where github_id = ?" id])]
-      rows)))
+(defn create [user-account]
+  (jdbc/insert! ds/db-spec :user_account (assoc user-account :id (ds/unique-id))))
+
+;(create (user-account. nil "enizeyimana"))
