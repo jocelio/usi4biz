@@ -1,5 +1,6 @@
 (ns usi4biz.datasource
   (:require [clojure.java.jdbc    :as jdbc]
+            [clojure.java.shell   :refer (sh)]
             [clojure.edn          :as edn]
             [hikari-cp.core       :refer :all]
             [joplin.core          :as joplin]
@@ -10,8 +11,6 @@
   (with-open [in (java.io.PushbackReader.
                    (clojure.java.io/reader "resources/db-config.edn"))]
     (edn/read in)))
-
-(db-config)
 
 (def datasource
   (make-datasource (db-config)))
@@ -46,3 +45,12 @@
 
 (defn unique-id []
   (.replace (.toUpperCase (str (java.util.UUID/randomUUID))) "-" ""))
+
+(defn database-dump []
+  (let [db-conf (db-config)]
+    (sh "mysqldump" (str "--user=" (:username db-conf))
+                    (str "--password=" (:password db-conf))
+                    (str "--result-file=data/backup_usi4biz.sql")
+                    (:database-name db-conf))))
+
+(database-dump)
