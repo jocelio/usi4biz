@@ -30,8 +30,8 @@
 
   :plugins [[lein-ring "0.8.13"]]
 
-  :ring {:handler usi4biz.handler/app
-         :init    usi4biz.handler/init
+  :ring {:init    usi4biz.handler/init
+         :handler usi4biz.handler/app
          :destroy usi4biz.handler/destroy}
 
   :profiles {:uberjar {:aot :all}
