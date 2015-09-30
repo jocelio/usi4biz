@@ -53,4 +53,9 @@
                     (str "--result-file=data/backup_usi4biz.sql")
                     (:database-name db-conf))))
 
-(database-dump)
+(defn dump-import []
+  (let [db-conf (db-config)]
+    (sh "mysql" "-u" (:username db-conf)
+                "-p" (:password db-conf)
+                (:database-name db-conf)
+                "<" "backup_usi4biz.sql")))
