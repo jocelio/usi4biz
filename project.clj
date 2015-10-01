@@ -12,6 +12,7 @@
                  [ring/ring-defaults         "0.1.2" ] ;
                  [liberator                  "0.13"  ] ; RESTful library
                  [http-kit                   "2.1.18"] ; High performance web server
+                 [selmer                     "0.9.2" ] ; Template engine
 
                  ; Database
                  [org.clojure/java.jdbc      "0.3.6" ] ; Java JDBC bundle
@@ -21,6 +22,7 @@
                  [joplin.jdbc                "0.2.9" ] ; Database migration for RDB
 
                  ; Utils
+                 [clj-time                   "0.11.0"] ; Date and time library
                  [org.slf4j/slf4j-log4j12    "1.7.1" ] ; Logging library
                  [log4j/log4j                "1.2.17"  ; Logging library
                   :exclusions [javax.mail/mail
