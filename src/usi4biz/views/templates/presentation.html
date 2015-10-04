@@ -1,0 +1,117 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Usi4Biz</title>
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+		<link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/black.css" id="theme">
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+                    <h1>{{product}}</h1>
+				    <h3>Gestion de projet</h3>
+				    <p>
+					    <small>Par <a href="http://hildeberto.com">{{author}}</a></small>
+				    </p>
+			    </section>
+
+                <section>
+                    <section>
+                        <h3>Backlog</h3>
+                        <div class="row">
+                            <div class="col-md-4">Size: <span class="badge">{{backlog-size}} tickets</span></div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <canvas id="line-chart-area" width="600" height="400"/>
+                            </div>
+                            <div class="col-md-4">
+                                <ul>
+                                    <li style="color: #ff0000;">Créé</li>
+                                    <li style="color: #ff8000;">Affecté</li>
+                                    <li style="color: #00ff00;">Terminé</li>
+                                    <li style="color: #00ffff;">Fermé</li>
+                                    <li style="color: #ff00ff;">Annulé</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h3>Backlog - Équipe</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Membre</th>
+                                    {% for milestone in milestones %}
+                                        <th>{{milestone}}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Apples</td>
+                                    {% for milestone in milestones %}
+                                        <td>{{milestone}}</td>
+                                    {% endfor %}
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                </section>
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/Chart.min.js"></script>
+		<script src="js/reveal.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+
+		<script>
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                transition: 'zoom', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true },
+                    { src: 'plugin/notes/notes.js', async: true }
+                ]
+            });
+            Reveal.configure({ slideNumber: 'c / t' });
+
+            var request = new XMLHttpRequest();
+
+            request.onreadystatechange = function() {
+                if(request.readyState == 4 && request.status === 200) {
+                    lineChartData = JSON.parse(request.responseText);
+                    var ctx = document.getElementById("line-chart-area").getContext("2d");
+                    window.lineChart = new Chart(ctx).Line(lineChartData);
+                    window.lineChart.update();
+                }
+            }
+            request.open("GET", "/charts/line", true);
+            request.send(null);
+		</script>
+    </body>
+</html>

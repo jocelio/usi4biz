@@ -7,7 +7,7 @@
 
 (defn find-all-milestones []
  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
-   (let [rows (jdbc/query conn ["select * from milestone"])]
+   (let [rows (jdbc/query conn ["select * from milestone where due_date >= now()"])]
      rows)))
 
 (defn find-by-product [product-id]
@@ -25,6 +25,6 @@
 
 ;(create (milestone. nil
 ;                    "DA8B4D129F4849E18799084DC74EF790"
-;                    "15.11.1.0"
-;                    "First release of November"
-;                    "2015-11-09"))
+;                    "15.9.2.5"
+;                    "Fifth patch of 15.9.2.0"
+;                    "2015-10-01"))
