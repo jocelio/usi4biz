@@ -20,6 +20,16 @@
     (let [rows (jdbc/query conn ["select * from milestone where id = ?" id])]
       rows)))
 
+(defn group-workload-by-person []
+  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
+    (jdbc/query conn ["select p.first_name, m.name as reference, count(i.reference) total
+                       from person p right join issue i on p.id = i.assignee right join milestone m on i.milestone = m.id
+                       where i.id not in (select issue
+                                          from issue_state
+                                          where state = 'FINISHED' or state = 'CLOSED' or state = 'CANCELED')
+                       group by p.first_name, m.name
+                       order by m.due_date desc"])))
+
 (defn create [milestone]
   (jdbc/insert! ds/db-spec :milestone (assoc milestone :id (ds/unique-id))))
 

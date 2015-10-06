@@ -8,7 +8,7 @@
 (defn tabular-values []
   (map #(conj (val %) (key %))
        (loop [res    {}
-              totals (issue-state/group-workload-by-person)]
+              totals (milestone/group-workload-by-person)]
           (if (empty? totals)
             res
             (recur (assoc res (:first_name (first totals))
