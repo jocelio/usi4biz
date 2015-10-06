@@ -20,7 +20,7 @@
             <div class="slides">
                 <section>
                     <h1>{{product}}</h1>
-				    <h3>Gestion de projet</h3>
+				    <h3>Indicateurs</h3>
 				    <p>
 					    <small>Par <a href="http://hildeberto.com">{{author}}</a></small>
 				    </p>
@@ -61,12 +61,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Apples</td>
-                                    {% for milestone in milestones %}
-                                        <td>{{milestone}}</td>
-                                    {% endfor %}
-                                </tr>
+                                {% for value in values %}
+                                    <tr>
+                                        {% for v in value %}
+                                            <td style="font-size: 70%;">{{v}}</td>
+                                        {% endfor%}
+                                    </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </section>

@@ -30,20 +30,6 @@
                        group by year(set_date), month(set_date)
                        order by set_date" state])))
 
-(defn labels []
-  (distinct (map #(str (calendar/month-name (:month %)) "-" (:year %))
-                 (concat (first (map #(find-total-state-per-month (val %)) states))))))
-
-(defn total-labels [state]
-  (let [total-state-per-month (find-total-state-per-month state)]
-    (apply assoc {} (interleave (map #(keyword (str (calendar/month-name (:month %)) "-" (:year %))) total-state-per-month)
-        (map #(:total %) total-state-per-month)))))
-
-(defn totals [state]
-  (map #(let [value (% (total-labels state))]
-          (if (nil? value) 0 value))
-       (map keyword (labels))))
-
 (defn accumulate-total-per-month [state]
   (let [totals (find-total-state-per-month state)]
     (loop [totals                  totals
@@ -58,17 +44,25 @@
                (conj totals-with-accumulated (assoc (first totals)
                                                     :accumulated accumulated)))))))
 
+(defn group-workload-by-person []
+  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
+    (jdbc/query conn ["select p.first_name, m.name as reference, count(i.reference) total
+                       from person p right join issue i on p.id = i.assignee right join milestone m on i.milestone = m.id
+                       where i.id not in (select issue
+                                          from issue_state
+                                          where state = 'FINISHED' or state = 'CLOSED' or state = 'CANCELED')
+                       group by p.first_name, m.name
+                       order by m.due_date desc"])))
+
 (defn create [issue-state]
   (jdbc/insert! ds/db-spec :issue_state (assoc issue-state :id (ds/unique-id))))
 
-;(let [ticket (:id (first (issue/find-by-reference "EPC-9381")))]
+;(let [ticket (:id (first (issue/find-by-reference "EPC-9394")))]
 ;  (create (issue-state. nil
 ;                ticket
-;                "CREATED"
+;                ;"CREATED"
 ;                ;"ASSIGNED"
-;                ;"FINISHED"
+;                "FINISHED"
 ;                ;"CLOSED"
 ;                ;"CANCELED"
-;                "2015-09-28 10:42:00"))
-;                ;"2015-09-24 15:00:00"))
-;)
+;                "2015-10-06 08:36:00")))
