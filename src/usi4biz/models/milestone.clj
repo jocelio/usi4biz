@@ -3,7 +3,7 @@
             [clojure.java.jdbc  :as jdbc]
             [usi4biz.datasource :as ds]))
 
-(defrecord milestone [id product name description due_date])
+(defrecord milestone [id product name description due_date, start_sprint, type])
 
 (defn find-all-milestones []
  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
@@ -20,6 +20,10 @@
     (let [rows (jdbc/query conn ["select * from milestone where id = ?" id])]
       rows)))
 
+(defn upcomming-milestone []
+  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
+    (jdbc/query conn ["select * from milestone where type = 'MAJOR' and due_date >= now() and start_sprint <= now()"])))
+
 (defn group-workload-by-person []
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
     (jdbc/query conn ["select p.first_name, m.name as reference, count(i.reference) total
@@ -35,6 +39,9 @@
 
 ;(create (milestone. nil
 ;                    "DA8B4D129F4849E18799084DC74EF790"
-;                    "15.9.2.5"
-;                    "Fifth patch of 15.9.2.0"
-;                    "2015-10-01"))
+;                    "15.11.2.0"
+;                    "Second release of November"
+;                    "2015-11-23"
+;                    "2015-11-05 12:00:00"
+;                    "MAJOR"))
+;                    ;"INTERMEDIARY"))

@@ -16,13 +16,21 @@
                    (rest totals))))))
 
 (defn index [acronym]
-  (let [a-product (first (product/find-by-acronym acronym))]
+  (let [a-product           (first (product/find-by-acronym acronym))
+        upcomming-milestone (first (milestone/upcomming-milestone))]
     (selmer/render-file "usi4biz/views/templates/presentation.html"
-      {:product (:acronym a-product)
-       :author "Hildeberto Mendonça, Ph.D."
-       :backlog-size (:size (first (issue-state/backlog-size)))
-       :milestones (map #(:name %) (milestone/find-all-milestones))
-       :values (tabular-values)})))
+      {:product                 (:acronym a-product)
+       :author                  "Hildeberto Mendonça, Ph.D."
+       :backlog-size            (:size (first (issue-state/backlog-size)))
+       :milestones              (map #(:name %) (milestone/find-all-milestones))
+       :values                  (tabular-values)
+       :upcomming-milestone     (:name upcomming-milestone)
+       :total-planned-issues    (:total (first (issue-state/total-planned-issues (:id upcomming-milestone))))
+       :total-unplanned-issues  (:total (first (issue-state/total-unplanned-issues)))
+       :total-finished-issues   (:total (first (issue-state/total-finished-issues)))
+       :total-unfinished-issues (:total (first (issue-state/total-unfinished-issues)))})))
+
+(:total (first (issue-state/total-unplanned-issues)))
 
 (defroutes routes
   (GET "/:acronym" [acronym] (index acronym)))
