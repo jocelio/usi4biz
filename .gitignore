@@ -2,3 +2,5 @@
 .nrepl-port
 log/
 target/
+resources/db-config.edn
+
