@@ -2,11 +2,15 @@
   (:require [hikari-cp.core           :refer :all]
             [clojure.java.jdbc        :as jdbc]
             [usi4biz.datasource       :as ds]
-            [usi4biz.models.issue     :as issue]
             [usi4biz.models.milestone :as milestone]
             [usi4biz.utils.calendar   :as calendar]))
 
-(def states {:CREATED "CREATED" :ASSIGNED "ASSIGNED" :FINISHED "FINISHED" :CLOSED "CLOSED" :CANCELED "CANCELED"})
+(def states {:CREATED  "CREATED"  ; when an issue is created
+             :ASSIGNED "ASSIGNED" ; when an issue has an assignee and a milestone
+             :FINISHED "FINISHED" ; when the work on an issue is finished
+             :CLOSED   "CLOSED"   ; when the work on an issue is recognized as finished
+             :CANCELED "CANCELED" ; when an issue can not be done for any reason
+             })
 
 (defrecord issue-state [id issue state set_date])
 
@@ -68,15 +72,7 @@
                (conj totals-with-accumulated (assoc (first totals)
                                                     :accumulated accumulated)))))))
 
-(defn create [issue-state]
-  (jdbc/insert! ds/db-spec :issue_state (assoc issue-state :id (ds/unique-id))))
-
-;(let [ticket (:id (first (issue/find-by-reference "EPC-9002")))]
-;  (create (issue-state. nil
-;                ticket
-;                ;"CREATED"
-;                "ASSIGNED"
-;                ;"FINISHED"
-;                ;"CLOSED"
-;                ;"CANCELED"
-;                "2015-09-24 15:00:00")))
+(defn create [a-issue-state]
+  (let [issue-state (assoc issue-state :id (ds/unique-id))]
+    (jdbc/insert! ds/db-spec :issue_state issue-state)
+    issue-state))
