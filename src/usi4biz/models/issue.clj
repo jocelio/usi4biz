@@ -52,11 +52,12 @@
 ;                ;"UNPLANNED"))
 ;                ;"UNPLANNED_APPROVED"))
 
-;(let [ticket (:id (first (find-by-reference "EPC-9443")))]
-;  (is/create {:issue ticket
-;              ;:state "CREATED"
-;              ;:state "ASSIGNED"
-;              ;:state "FINISHED"
-;              :state "CLOSED"
-;              :set_date "2015-10-18 22:52:00"}
-;             ))
+(let [ticket (:id (first (find-by-reference "EPC-9107")))]
+  (is/create {:issue ticket
+              ;:state "CREATED"
+              ;:state "ASSIGNED"
+              ;:state "FINISHED"
+              ;:state "CLOSED"
+              :state "CANCELED"
+              :set_date "2015-10-19 15:18:00"}
+             ))
