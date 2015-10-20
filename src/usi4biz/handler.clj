@@ -13,7 +13,8 @@
 
 (defn destroy []
   (println "Usi4Biz is stopping...")
-  (ds/close))
+  (ds/close)
+  (println "Datasource closed. Goodbye!"))
 
 (defroutes app-routes
   (route/resources "/")
