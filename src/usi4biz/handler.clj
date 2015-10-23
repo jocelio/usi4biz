@@ -3,8 +3,9 @@
             [compojure.route             :as route]
             [ring.middleware.defaults    :refer [wrap-defaults site-defaults]]
             [usi4biz.datasource          :as ds]
-            [usi4biz.routes.presentation :as presentation]
-            [usi4biz.routes.chart        :as chart]))
+            [usi4biz.routes.chart        :as chart]
+            [usi4biz.routes.index        :as index]
+            [usi4biz.routes.presentation :as presentation]))
 
 (defn init []
   (println "Usi4Biz is starting...")
@@ -20,4 +21,7 @@
   (route/not-found "<h2>Not Found</h2>"))
 
 (def app
-  (-> (routes presentation/routes chart/routes app-routes)))
+  (-> (routes chart/routes
+              index/routes
+              presentation/routes
+              app-routes)))

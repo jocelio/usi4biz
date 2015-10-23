@@ -73,6 +73,6 @@
                                                     :accumulated accumulated)))))))
 
 (defn create [a-issue-state]
-  (let [issue-state (assoc issue-state :id (ds/unique-id))]
+  (let [issue-state (assoc a-issue-state :id (ds/unique-id))]
     (jdbc/insert! ds/db-spec :issue_state issue-state)
     issue-state))

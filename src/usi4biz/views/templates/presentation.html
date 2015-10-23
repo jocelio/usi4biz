@@ -6,13 +6,12 @@
         <title>Usi4Biz</title>
 
         <meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+		    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-		<link rel="stylesheet" href="css/reveal.css">
+		    <link rel="stylesheet" href="css/reveal.css">
         <link rel="stylesheet" href="css/theme/black.css" id="theme">
     </head>
     <body>
@@ -22,9 +21,9 @@
                     <h1>{{product}}</h1>
                     <h3>Indicateurs</h3>
                     <p>
-		        <small>Par <a href="http://hildeberto.com">{{author}}</a></small>
+		                    <small>Par <a href="http://hildeberto.com">{{author}}</a></small>
                     </p>
-		</section>
+		            </section>
 
                 <section>
                     <section>
@@ -82,7 +81,7 @@
                         <li>Total des tickets resolue: {{total-finished-issues}}</li>
                         <li>Total des tickets non resolue: {{total-unfinished-issues}}</li>
                     </ul>
-		</section>
+	              </section>
 
                 <section>
                     <h3>Règles</h3>
@@ -92,16 +91,16 @@
                         <li>Les tickets sont attribués par le gestionnaire de configuration</li>
                         <li>Les tickets sont attribués par le gestionnaire de configuration</li>
                     </ul>
-		</section>
+		            </section>
             </div>
         </div>
 
         <script src="lib/js/head.min.js"></script>
         <script src="js/Chart.min.js"></script>
-		<script src="js/reveal.js"></script>
+        <script src="js/reveal.js"></script>
         <script src="js/bootstrap.min.js"></script>
 
-		<script>
+		    <script>
             Reveal.initialize({
                 controls: true,
                 progress: true,
@@ -110,7 +109,7 @@
 
                 transition: 'zoom', // none/fade/slide/convex/concave/zoom
 
-				// Optional reveal.js plugins
+				        // Optional reveal.js plugins
                 dependencies: [
                     { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
                     { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
@@ -134,6 +133,6 @@
             }
             request.open("GET", "/charts/line", true);
             request.send(null);
-		</script>
+		    </script>
     </body>
 </html>

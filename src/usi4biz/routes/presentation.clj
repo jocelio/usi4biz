@@ -30,7 +30,5 @@
        :total-finished-issues   (:total (first (issue-state/total-finished-issues)))
        :total-unfinished-issues (:total (first (issue-state/total-unfinished-issues)))})))
 
-(:total (first (issue-state/total-unplanned-issues)))
-
 (defroutes routes
   (GET "/:acronym" [acronym] (index acronym)))
