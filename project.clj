@@ -1,4 +1,4 @@
-(defproject usi4biz "0.1.0-SNAPSHOT"
+(defproject usi4biz "0.2.0-SNAPSHOT"
   :description "Usi4Biz means usability for business."
   :url "http://usi4biz.com"
 
