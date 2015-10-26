@@ -34,14 +34,18 @@
                        group by p.first_name, m.name
                        order by m.due_date desc"])))
 
-(defn create [milestone]
-  (jdbc/insert! ds/db-spec :milestone (assoc milestone :id (ds/unique-id))))
+(defn create [a-milestone]
+  (let [milestone (assoc a-milestone :id (ds/unique-id))]
+    (jdbc/insert! ds/db-spec :milestone milestone)
+    milestone))
 
-;(create (milestone. nil
-;                    "DA8B4D129F4849E18799084DC74EF790"
-;                    "15.11.2.0"
-;                    "Second release of November"
-;                    "2015-11-23"
-;                    "2015-11-05 12:00:00"
-;                    "MAJOR"))
-;                    ;"INTERMEDIARY"))
+(comment
+(create (milestone. nil
+                    "DA8B4D129F4849E18799084DC74EF790"
+                    "15.10.2.1"
+                    "First patch of 15.10.2.0"
+                    "2015-10-26"
+                    "2015-10-26 00:00:00"
+                    ;"MAJOR"))
+                    "INTERMEDIARY"))
+)

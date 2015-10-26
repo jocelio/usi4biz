@@ -20,19 +20,17 @@
     (jdbc/insert! ds/db-spec :issue issue)
     issue))
 
+;(comment
 (let [id (:id (create (issue. nil
                 "DA8B4D129F4849E18799084DC74EF790"
-                "EPC-9460"
-                "(48815) [Parcours] Le total des crédits acquis ne peut pas être arrondi"
+                "EPC-9461"
+                "[CORRECTION URGENTE] : Documents à archiver + dossier de l'étudiant - Poids à recupérer dans la LCP du programme type"
                 nil ; description
-                ;"D9E80EF8E9EE43F1B042804DC5EB47D7" ; 15.10.1.1
-                ;"1FB2DD6128DD44AAADA8ECAD4199C88B" ; 15.10.1.2
-                ;"F9179AC300954707AE599D5F94768579" ; 15.10.1.3
-                ;"F2DE80107F2A40938581B369207A0CDF" ; 15.10.1.4
                 ;"9A1BB00EEEBA47E8A288DEFA144FAEF2" ; 15.10.2.0
+                "E08A644C41C94AB6B7E4B9B1E0EC430C" ; 15.10.2.1
                 ;"F56E712F1E7D42ADBBADA3B148E91C41" ; 15.11.1.0
                 ;"28709268554E46BFA9A5B724DAE7E59E" ; 15.11.2.0
-                nil ; à affecté
+                ;nil ; à affecté
 
                 ;nil ; personne
                 ;"12A2194D3B1A4323AD4EE55A1B37760E" ; Axel
@@ -46,21 +44,23 @@
                 ;"2299CB3FD107447EBD00D5467D648AD8" ; Mona
                 ;"31A84B88F8904923A43F5B83011E5A69" ; Philippe
                 nil ; effort
-                "IMPORTANT"
+                ;"IMPORTANT"
                 ;"ESSENCIAL"
-                ;"BLOCKING"
-                nil ; Planning not defined
+                "BLOCKING"
+                ;nil ; Planning not defined
                 ;"PLANNED"
-                ;"UNPLANNED"
+                "UNPLANNED"
                 ;"UNPLANNED_APPROVED"
           )))]
-    (iss/create {:issue id :state "CREATED" :set_date "2015-10-23 16:17:00"}))
+    (iss/create {:issue id :state "CREATED" :set_date "2015-10-26 11:20:00"}))
+;)
 
-
-(let [ticket (:id (first (find-by-reference "EPC-9450")))]
+;(comment
+(let [ticket (:id (first (find-by-reference "EPC-9461")))]
   (iss/create {:issue ticket
-                ;:state "ASSIGNED"
-                ;:state "FINISHED"
-                :state "CLOSED"
-                ;:state "CANCELED"
-                :set_date "2015-10-25 21:01:00"}))
+               ;:state "ASSIGNED"
+               ;:state "FINISHED"
+               :state "CLOSED"
+               ;:state "CANCELED"
+               :set_date "2015-10-26 23:36:00"}))
+;)
