@@ -1,5 +1,6 @@
 .lein-repl-history
 .nrepl-port
+data/
 log/
 target/
 resources/db-config.edn
