@@ -1,9 +1,17 @@
-(ns usi4biz.routes.presentation
-  (:require [compojure.core             :refer [defroutes GET]]
+(ns usi4biz.routes.product
+  (:require [compojure.core             :refer [defroutes GET POST]]
             [selmer.parser              :as selmer]
             [usi4biz.models.product     :as product]
             [usi4biz.models.issue-state :as issue-state]
             [usi4biz.models.milestone   :as milestone]))
+
+(defn products
+  ([] (products nil nil nil))
+  ([name description acronym]
+    (if (and (nil? name) (nil? description) (nil? acronym))
+      (selmer/render-file "usi4biz/views/templates/products.html"
+        {:products (product/find-all-products)})
+      (product/create {:name name :description description :acronym acronym}))))
 
 (defn tabular-values []
   (map #(conj (val %) (key %))
@@ -15,7 +23,7 @@
                               (conj (get res (:first_name (first totals))) (:total (first totals))))
                    (rest totals))))))
 
-(defn index [acronym]
+(defn presentation [acronym]
   (let [a-product           (first (product/find-by-acronym acronym))
         upcomming-milestone (first (milestone/upcomming-milestone))]
     (selmer/render-file "usi4biz/views/templates/presentation.html"
@@ -31,4 +39,7 @@
        :total-unfinished-issues (:total (first (issue-state/total-unfinished-issues)))})))
 
 (defroutes routes
-  (GET "/:acronym" [acronym] (index acronym)))
+  (GET  "/products" [] (products))
+  (GET  "/products/new" [] (selmer/render-file "usi4biz/views/templates/product_form.html" {}))
+  (GET  "/product/presentation/:acronym" [acronym] (presentation acronym))
+  (POST "/products" [name description acronym] (products name description acronym)))

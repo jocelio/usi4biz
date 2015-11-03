@@ -5,7 +5,7 @@
             [usi4biz.datasource          :as ds]
             [usi4biz.routes.chart        :as chart]
             [usi4biz.routes.index        :as index]
-            [usi4biz.routes.presentation :as presentation]))
+            [usi4biz.routes.product      :as product]))
 
 (defn init []
   (println "Usi4Biz is starting...")
@@ -23,5 +23,5 @@
 (def app
   (-> (routes chart/routes
               index/routes
-              presentation/routes
+              product/routes
               app-routes)))

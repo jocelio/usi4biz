@@ -1,0 +1,20 @@
+{% extends "usi4biz/views/templates/layout.html" %}
+{% block content %}
+<h2>Product</h2>
+<form method="post" action="/products">
+  <div class="form-group">
+    <label for="acronym">Acronym</label>
+    <input type="text" class="form-control" name="acronym">
+  </div>
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" name="name">
+  </div>
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea class="form-control" name="description"></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+{% endblock %}

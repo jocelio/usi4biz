@@ -16,5 +16,7 @@
     (let [rows (jdbc/query conn ["select * from product where acronym = ?" (string/upper-case acronym)])]
       rows)))
 
-(defn create [product]
-  (jdbc/insert! ds/db-spec :product (assoc product :id (ds/unique-id))))
+(defn create [a-product]
+  (let [product (assoc a-product :id (ds/unique-id))]
+    (jdbc/insert! ds/db-spec :product product)
+    product))
