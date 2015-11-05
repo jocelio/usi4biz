@@ -1,20 +1,21 @@
 {% extends "usi4biz/views/templates/layout.html" %}
 {% block content %}
 <h2>Product</h2>
-<form method="post" action="/products">
+<form action="/products" method="POST">
   <div class="form-group">
     <label for="acronym">Acronym</label>
-    <input type="text" class="form-control" name="acronym">
+    <input type="text" name="acronym" id="acronym" class="form-control"></input>
   </div>
   <div class="form-group">
     <label for="name">Name</label>
-    <input type="text" class="form-control" name="name">
+    <input type="text" name="name" id="name" class="form-control"></input>
   </div>
   <div class="form-group">
     <label for="description">Description</label>
-    <textarea class="form-control" name="description"></textarea>
+    <textarea name="description" id="description" class="form-control"></textarea>
   </div>
-  <button type="submit" class="btn btn-primary">Save</button>
+  <input type="submit" class="btn btn-primary" value="Save">
+  <a href="/products" class="btn btn-default">Cancel</a>
 </form>
 
 {% endblock %}

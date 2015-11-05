@@ -6,12 +6,13 @@
             [usi4biz.models.milestone   :as milestone]))
 
 (defn products
-  ([] (products nil nil nil))
-  ([name description acronym]
-    (if (and (nil? name) (nil? description) (nil? acronym))
+  ([] (selmer/render-file "usi4biz/views/templates/products.html"
+        {:products (product/find-all-products)}))
+  ([acronym name description]
       (selmer/render-file "usi4biz/views/templates/products.html"
-        {:products (product/find-all-products)})
-      (product/create {:name name :description description :acronym acronym}))))
+                          {:product (product/create {:acronym acronym
+                                                     :name name
+                                                     :description description})})))
 
 (defn tabular-values []
   (map #(conj (val %) (key %))
@@ -42,4 +43,4 @@
   (GET  "/products" [] (products))
   (GET  "/products/new" [] (selmer/render-file "usi4biz/views/templates/product_form.html" {}))
   (GET  "/product/presentation/:acronym" [acronym] (presentation acronym))
-  (POST "/products" [name description acronym] (products name description acronym)))
+  (POST "/products" [acronym name description] (products acronym name description)))

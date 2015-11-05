@@ -1,6 +1,9 @@
 {% extends "usi4biz/views/templates/layout.html" %}
 {% block content %}
 <h2>Products</h2>
+{% if product|not-empty %}
+  {{ product.name}} registered successfully.
+{% endif %}
 <form>
   <a href="/products/new" class="btn btn-default pull-right">New...</a>
 </form>
