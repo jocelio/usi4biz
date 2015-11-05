@@ -17,8 +17,8 @@
     {% for product in products %}
       <tr>
         <td>{{ product.acronym }}</td>
-        <td>{{ product.name }}</td>
-        <td>{{ product.descrition }}</td>
+        <td><a href="/products/{{ product.id }}">{{ product.name }}</a></td>
+        <td>{{ product.description }}</td>
       </tr>
     {% endfor %}
   </tbody>

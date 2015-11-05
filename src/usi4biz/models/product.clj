@@ -6,15 +6,13 @@
 
 (defrecord product [id name description acronym])
 
-(defn find-all-products []
- (jdbc/with-db-connection [conn {:datasource ds/datasource}]
-   (let [rows (jdbc/query conn ["select * from product"])]
-     rows)))
-
-(defn find-by-acronym [acronym]
+(defn find [id]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
-    (let [rows (jdbc/query conn ["select * from product where acronym = ?" (string/upper-case acronym)])]
-      rows)))
+    (first (jdbc/query conn ["select * from product where id = ?" id]))))
+
+(defn find-all []
+ (jdbc/with-db-connection [conn {:datasource ds/datasource}]
+   (jdbc/query conn ["select * from product"])))
 
 (defn create [a-product]
   (let [product (assoc a-product :id (ds/unique-id))]
