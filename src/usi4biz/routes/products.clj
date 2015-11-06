@@ -1,7 +1,6 @@
 (ns usi4biz.routes.products
-  (:require [compojure.core             :refer [defroutes context GET POST]]
+  (:require [compojure.core             :refer [defroutes context DELETE GET POST]]
             [selmer.parser              :as selmer]
-            [usi4biz.datasource         :as ds]
             [usi4biz.models.product     :as product]
             [usi4biz.models.issue-state :as issue-state]
             [usi4biz.models.milestone   :as milestone]
@@ -63,4 +62,5 @@
     (GET  "/:id{[A-Z_0-9]{32}}/presentation" [id]
           (presentation id))
     (POST "/" [id acronym name description]
-          (products id acronym name description))))
+          (products id acronym name description))
+    (DELETE "/:id{[A-Z_0-9]{32}}" [id] (product/delete id))))

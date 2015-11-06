@@ -22,3 +22,7 @@
     (let [product a-product]
       (jdbc/update! ds/db-spec :product product ["id = ?" (:id product)])
       product)))
+
+(defn delete [id]
+  (jdbc/delete! ds/db-spec :product ["id = ?" id])
+  id)
