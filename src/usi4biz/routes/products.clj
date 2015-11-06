@@ -19,6 +19,10 @@
                                    :description description})
          :products (product/find-all)})))
 
+(defn product-form
+  ([]   (selmer/render-file (path-to "product_form.html") {}))
+  ([id] (selmer/render-file (path-to "product_form.html") {:product (product/find id)})))
+
 (defn tabular-values []
   (map #(conj (val %) (key %))
        (loop [res    {}
@@ -46,7 +50,8 @@
 
 (defroutes routes
   (GET  "/products" []                         (products))
-  (GET  "/products/new" []                     (selmer/render-file (path-to "product_form.html") {}))
   (GET  "/products/:id" [id]                   (products id))
+  (GET  "/products/form" []                    (product-form))
+  (GET  "/products/:id/form" [id]              (product-form id))
   (GET  "/products/:id/presentation" [id]      (presentation id))
   (POST "/products" [acronym name description] (products acronym name description)))

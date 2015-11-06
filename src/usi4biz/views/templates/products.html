@@ -2,10 +2,13 @@
 {% block content %}
 <h2>Products</h2>
 {% if product|not-empty %}
-  {{ product.name}} registered successfully.
+  <div class="alert alert-success alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>{{ product.name}}</strong> registered successfully!
+  </div>
 {% endif %}
 <form>
-  <a href="/products/new" class="btn btn-default pull-right">New...</a>
+  <a href="/products/form" class="btn btn-default pull-right">New...</a>
 </form>
 <table class="table table-striped table-hover">
   <thead>
