@@ -6,22 +6,23 @@
     <div class="col-md-3">
       <div class="form-group">
         <label for="acronym">Acronym</label>
-        <input type="text" name="acronym" id="acronym" class="form-control"></input>
+        <input type="text" name="acronym" id="acronym" class="form-control" value="{{ product.acronym }}"></input>
       </div>
     </div>
     <div class="col-md-9">
       <div class="form-group">
         <label for="name">Name</label>
-        <input type="text" name="name" id="name" class="form-control"></input>
+        <input type="text" name="name" id="name" class="form-control" value="{{ product.name }}"></input>
       </div>
     </div>
   </div>
   <div class="form-group">
     <label for="description">Description</label>
-    <textarea name="description" id="description" class="form-control"></textarea>
+    <textarea name="description" id="description" class="form-control">{{ product.description }}</textarea>
   </div>
+  <input type="hidden" name="id" value="{{ product.id }}">
+
   <input type="submit" class="btn btn-primary" value="Save">
   <a href="/products" class="btn btn-default">Cancel</a>
 </form>
-
 {% endblock %}

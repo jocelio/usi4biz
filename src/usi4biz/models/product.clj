@@ -14,7 +14,11 @@
  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
    (jdbc/query conn ["select * from product"])))
 
-(defn create [a-product]
-  (let [product (assoc a-product :id (ds/unique-id))]
-    (jdbc/insert! ds/db-spec :product product)
-    product))
+(defn save [a-product]
+  (if (empty? (:id a-product))
+    (let [product (assoc a-product :id (ds/unique-id))]
+      (jdbc/insert! ds/db-spec :product product)
+      product)
+    (let [product a-product]
+      (jdbc/update! ds/db-spec :product product ["id = ?" (:id product)])
+      product)))

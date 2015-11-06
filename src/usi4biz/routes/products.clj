@@ -1,6 +1,7 @@
 (ns usi4biz.routes.products
-  (:require [compojure.core             :refer [defroutes GET POST]]
+  (:require [compojure.core             :refer [defroutes context GET POST]]
             [selmer.parser              :as selmer]
+            [usi4biz.datasource         :as ds]
             [usi4biz.models.product     :as product]
             [usi4biz.models.issue-state :as issue-state]
             [usi4biz.models.milestone   :as milestone]
@@ -12,11 +13,12 @@
   ([id]
       (selmer/render-file (path-to "product.html")
         {:product (product/find id)}))
-  ([acronym name description]
+  ([id acronym name description]
       (selmer/render-file (path-to "products.html")
-        {:product (product/create {:acronym acronym
-                                   :name name
-                                   :description description})
+        {:product (product/save {:id id
+                                 :acronym acronym
+                                 :name name
+                                 :description description})
          :products (product/find-all)})))
 
 (defn product-form
@@ -49,9 +51,16 @@
        :total-unfinished-issues (:total (first (issue-state/total-unfinished-issues)))})))
 
 (defroutes routes
-  (GET  "/products" []                         (products))
-  (GET  "/products/:id" [id]                   (products id))
-  (GET  "/products/form" []                    (product-form))
-  (GET  "/products/:id/form" [id]              (product-form id))
-  (GET  "/products/:id/presentation" [id]      (presentation id))
-  (POST "/products" [acronym name description] (products acronym name description)))
+  (context "/products" []
+    (GET  "/" []
+          (products))
+    (GET  "/:id{[A-Z_0-9]{32}}" [id]
+          (products id))
+    (GET  "/form" []
+          (product-form))
+    (GET  "/:id{[A-Z_0-9]{32}}/form" [id]
+          (product-form id))
+    (GET  "/:id{[A-Z_0-9]{32}}/presentation" [id]
+          (presentation id))
+    (POST "/" [id acronym name description]
+          (products id acronym name description))))
