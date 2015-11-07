@@ -17,9 +17,3 @@
 
 (defn create [person]
   (jdbc/insert! ds/db-spec :person (assoc person :id (ds/unique-id))))
-
-(create (person. nil
-                 "Liliane"
-                 "Lambaux"
-                 "liliane.lambaux@uclouvain.be"
-                 nil))
