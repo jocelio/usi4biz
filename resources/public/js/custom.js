@@ -4,7 +4,7 @@ $(function() {
       $.ajax({
         type: "DELETE",
         url: window.location.href,
-        success: function(msg){
+        success: function(msg) {
           url = window.location.href.toString();
           url = url.replace("/" + msg, "");
           window.location.replace(url);

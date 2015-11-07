@@ -2,9 +2,12 @@
   (:require [hikari-cp.core     :refer :all]
             [clojure.java.jdbc  :as jdbc]
             [clojure.string     :as string]
-            [usi4biz.datasource :as ds]))
+            [usi4biz.datasource :as ds]
+            [bouncer.validators :as v]))
 
 (defrecord product [id name description acronym])
+
+(def validation-rules {:name v/required})
 
 (defn find [id]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]

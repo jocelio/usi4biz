@@ -1,1 +1,5 @@
 body { padding-top: 70px; }
+
+.help-block-red {
+  color: #FF0000;
+}

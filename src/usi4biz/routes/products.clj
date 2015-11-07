@@ -4,21 +4,29 @@
             [usi4biz.models.product     :as product]
             [usi4biz.models.issue-state :as issue-state]
             [usi4biz.models.milestone   :as milestone]
-            [usi4biz.utils.templates    :refer :all]))
+            [usi4biz.utils.templates    :refer :all]
+            [bouncer.core               :as b]))
 
 (defn products
   ([] (selmer/render-file (path-to "products.html")
         {:products (product/find-all)}))
   ([id]
       (selmer/render-file (path-to "product.html")
-        {:product (product/find id)}))
-  ([id acronym name description]
+        {:product (product/find id)})))
+
+(defn save-product [id acronym name description]
+  (let [product {:id id :acronym acronym :name name :description description}]
+    (if (b/valid? product product/validation-rules)
       (selmer/render-file (path-to "products.html")
         {:product (product/save {:id id
                                  :acronym acronym
                                  :name name
                                  :description description})
-         :products (product/find-all)})))
+         :products (product/find-all)})
+      (selmer/render-file (path-to "product_form.html")
+        {:product product
+         :error-name (first (:name (first (b/validate product product/validation-rules))))
+         :error (b/validate product product/validation-rules)}))))
 
 (defn product-form
   ([]   (selmer/render-file (path-to "product_form.html") {}))
@@ -62,5 +70,5 @@
     (GET  "/:id{[A-Z_0-9]{32}}/presentation" [id]
           (presentation id))
     (POST "/" [id acronym name description]
-          (products id acronym name description))
+          (save-product id acronym name description))
     (DELETE "/:id{[A-Z_0-9]{32}}" [id] (product/delete id))))
