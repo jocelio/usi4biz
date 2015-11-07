@@ -7,12 +7,12 @@
                  [org.clojure/data.json      "0.2.6" ] ; Json library
 
                  ; Web
-                 [compojure                  "1.3.4" ] ; Routing library
+                 [compojure                  "1.4.0" ] ; Routing library
                  [ring-server                "0.4.0" ] ; Default web server
-                 [ring/ring-defaults         "0.1.2" ] ;
+                 [ring/ring-defaults         "0.1.2" ] ; HTTP middleware
                  [liberator                  "0.13"  ] ; RESTful library
                  [http-kit                   "2.1.18"] ; High performance web server
-                 [selmer                     "0.9.2" ] ; Template engine
+                 [selmer                     "0.9.4" ] ; Template engine
 
                  ; Database
                  [org.clojure/java.jdbc      "0.3.6" ] ; Java JDBC bundle
@@ -23,6 +23,7 @@
 
                  ; Utils
                  [clj-time                   "0.11.0"] ; Date and time library
+                 [bouncer                    "0.3.3" ] ; Validation library
                  [org.slf4j/slf4j-log4j12    "1.7.1" ] ; Logging library
                  [log4j/log4j                "1.2.17"  ; Logging library
                   :exclusions [javax.mail/mail

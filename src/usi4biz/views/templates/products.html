@@ -1,0 +1,29 @@
+{% extends "usi4biz/views/templates/layout.html" %}
+{% block content %}
+<h2>Products</h2>
+{% if product|not-empty %}
+  <div class="alert alert-success alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>{{ product.name}}</strong> registered successfully!
+  </div>
+{% endif %}
+<form>
+  <a href="/products/form" class="btn btn-default pull-right">New...</a>
+</form>
+<table class="table table-striped table-hover">
+  <thead>
+    <th>Acronym</th>
+    <th>Name</th>
+    <th>Description</th>
+  </thead>
+  <tbody>
+    {% for product in products %}
+      <tr>
+        <td>{{ product.acronym }}</td>
+        <td><a href="/products/{{ product.id }}">{{ product.name }}</a></td>
+        <td>{{ product.description }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
