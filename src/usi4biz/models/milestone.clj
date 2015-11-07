@@ -1,24 +1,22 @@
 (ns usi4biz.models.milestone
   (:require [hikari-cp.core     :refer :all]
             [clojure.java.jdbc  :as jdbc]
-            [usi4biz.datasource :as ds]))
+            [usi4biz.datasource :as ds]
+            [bouncer.validators :as v]))
 
 (defrecord milestone [id product name description due_date, start_sprint, type])
 
-(defn find-all-milestones []
+(def validation-rules {:product v/required
+                       :name    v/required
+                       :type    v/required})
+
+(defn find [id]
  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
-   (let [rows (jdbc/query conn ["select * from milestone where due_date >= now()"])]
-     rows)))
+   (first (jdbc/query conn ["select * from milestone where id = ?" id]))))
 
 (defn find-by-product [product-id]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
-    (let [rows (jdbc/query conn ["select * from milestone where product = ?" product-id])]
-      rows)))
-
-(defn find-milestone [id]
-  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
-    (let [rows (jdbc/query conn ["select * from milestone where id = ?" id])]
-      rows)))
+    (jdbc/query conn ["select * from milestone where product = ?" product-id])))
 
 (defn upcomming-milestone []
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
@@ -34,18 +32,14 @@
                        group by p.first_name, m.name
                        order by m.due_date desc"])))
 
-(defn create [a-milestone]
-  (let [milestone (assoc a-milestone :id (ds/unique-id))]
-    (jdbc/insert! ds/db-spec :milestone milestone)
-    milestone))
+(defn save [a-milestone]
+ (if (empty? (:id a-milestone))
+   (let [milestone (assoc a-milestone :id (ds/unique-id))]
+     (jdbc/insert! ds/db-spec :milestone milestone)
+     milestone)
+   (let [milestone a-milestone]
+     (jdbc/update! ds/db-spec :milestone milestone ["id = ?" (:id milestone)])
+     milestone)))
 
-(comment
-(create (milestone. nil
-                    "DA8B4D129F4849E18799084DC74EF790"
-                    "15.10.2.1"
-                    "First patch of 15.10.2.0"
-                    "2015-10-26"
-                    "2015-10-26 00:00:00"
-                    ;"MAJOR"))
-                    "INTERMEDIARY"))
-)
+(defn delete [id]
+ (jdbc/delete! ds/db-spec :milestone ["id = ?" id]) id)
