@@ -6,7 +6,8 @@
             [usi4biz.datasource          :as ds]
             [usi4biz.routes.chart        :as chart]
             [usi4biz.routes.index        :as index]
-            [usi4biz.routes.products     :as products]))
+            [usi4biz.routes.products     :as products]
+            [usi4biz.routes.milestones   :as milestones]))
 
 (defn init []
   (println "Usi4Biz is starting...")
@@ -25,4 +26,5 @@
   (handler/site (routes chart/routes
                         index/routes
                         products/routes
+                        milestones/routes
                         app-routes)))

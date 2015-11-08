@@ -6,17 +6,22 @@
 
 (defrecord milestone [id product name description due_date, start_sprint, type])
 
+(def types {:MAJOR        "MAJOR" ; planned milestone with fixed periodicity
+            :INTERMEDIARY "INTERMEDIARY"}) ; unplanned milestone to apply a patch.
+
 (def validation-rules {:product v/required
                        :name    v/required
                        :type    v/required})
 
 (defn find [id]
  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
-   (first (jdbc/query conn ["select * from milestone where id = ?" id]))))
+   (first (jdbc/query conn ["select m.id, m.product, p.name as product_name, m.name, m.description, m.due_date, m.start_sprint, m.type
+                             from milestone m join product p on m.product = p.id
+                             where m.id = ?" id]))))
 
 (defn find-by-product [product-id]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
-    (jdbc/query conn ["select * from milestone where product = ?" product-id])))
+    (jdbc/query conn ["select * from milestone where product = ? order by due_date desc" product-id])))
 
 (defn upcomming-milestone []
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]

@@ -11,6 +11,8 @@
         <link rel="stylesheet" href="/css/main.css">
         <link rel="stylesheet" href="/css/bootstrap.min.css">
         <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+        {% block style %}
+        {% endblock %}
     </head>
     <body>
         <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -47,5 +49,7 @@
         <script src="/js/jquery-2.1.4.min.js"></script>
         <script src="/js/bootstrap.min.js"></script>
         <script src="/js/custom.js"></script>
+        {% block script %}
+        {% endblock %}
     </body>
 </html>

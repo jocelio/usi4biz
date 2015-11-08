@@ -2,28 +2,33 @@
 {% block content %}
 <h2>Product</h2>
 <form action="/products" method="POST">
-  <div class="row">
-    <div class="col-md-3">
-      <div class="form-group">
-        <label for="acronym">Acronym</label>
-        <input type="text" name="acronym" id="acronym" class="form-control" value="{{ product.acronym }}"></input>
-      </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save</button>
     </div>
-    <div class="col-md-9">
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" name="name" id="name" class="form-control" value="{{ product.name }}"></input>
-        <p class="help-block-red">{{ error-name }}.</p>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="acronym">Acronym</label>
+            <input type="text" name="acronym" id="acronym" class="form-control" value="{{ product.acronym }}"></input>
+          </div>
+        </div>
+        <div class="col-md-9">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" class="form-control" value="{{ product.name }}"></input>
+            <p class="help-block-red">{{ error-name }}.</p>
+          </div>
+        </div>
       </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea name="description" id="description" class="form-control">{{ product.description }}</textarea>
+      </div>
+      <input type="hidden" name="id" value="{{ product.id }}">
     </div>
   </div>
-  <div class="form-group">
-    <label for="description">Description</label>
-    <textarea name="description" id="description" class="form-control">{{ product.description }}</textarea>
-  </div>
-  <input type="hidden" name="id" value="{{ product.id }}">
-
-  <input type="submit" class="btn btn-primary" value="Save">
-  <a href="/products" class="btn btn-default">Cancel</a>
+  <a href="/products/{{ product.id }}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Back</a>
 </form>
 {% endblock %}
