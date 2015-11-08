@@ -1,11 +1,11 @@
 (ns usi4biz.datasource
-  (:require [clojure.java.jdbc    :as jdbc]
-            [clojure.java.shell   :refer (sh)]
-            [clojure.edn          :as edn]
-            [hikari-cp.core       :refer :all]
-            [joplin.core          :as joplin]
-            [joplin.jdbc.database]))
-
+  (:require [clojure.java.jdbc      :as jdbc]
+            [clojure.java.shell     :refer (sh)]
+            [clojure.edn            :as edn]
+            [hikari-cp.core         :refer :all]
+            [joplin.core            :as joplin]
+            [joplin.jdbc.database]
+            [usi4biz.utils.calendar :as calendar]))
 
 (defn db-config []
   (with-open [in (java.io.PushbackReader.
@@ -59,3 +59,9 @@
                 "-p" (:password db-conf)
                 (:database-name db-conf)
                 "<" "backup_usi4biz.sql")))
+
+(defn format-date-db [str-date format]
+  (calendar/to-string (calendar/to-date str-date format) "yyyy-MM-dd"))
+
+(defn format-timestamp-db [str-timestamp format]
+    (calendar/to-string (calendar/to-date str-timestamp format) "yyyy-MM-dd HH:mm"))

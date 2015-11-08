@@ -17,5 +17,3 @@
 
 (defn create [user-account]
   (jdbc/insert! ds/db-spec :user_account (assoc user-account :id (ds/unique-id))))
-
-;(create (user-account. nil "enizeyimana"))

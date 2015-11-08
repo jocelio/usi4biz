@@ -18,15 +18,11 @@
   (let [product {:id id :acronym acronym :name name :description description}]
     (if (b/valid? product product/validation-rules)
       (selmer/render-file (path-to "products.html")
-        {:product (product/save {:id id
-                                 :acronym acronym
-                                 :name name
-                                 :description description})
+        {:product (product/save product)
          :products (product/find-all)})
       (selmer/render-file (path-to "product_form.html")
         {:product product
-         :error-name (first (:name (first (b/validate product product/validation-rules))))
-         :error (b/validate product product/validation-rules)}))))
+         :error-name (first (:name (first (b/validate product product/validation-rules))))}))))
 
 (defn product-form
   ([]   (selmer/render-file (path-to "product_form.html") {}))
@@ -49,7 +45,7 @@
       {:product                 (:acronym a-product)
        :author                  "Hildeberto Mendonça, Ph.D."
        :backlog-size            (:size (first (issue-state/backlog-size)))
-       :milestones              (map #(:name %) (milestone/find-all-milestones))
+       :milestones              (map #(:name %) (milestone/find-by-product product-id))
        :values                  (tabular-values)
        :upcomming-milestone     (:name upcomming-milestone)
        :total-planned-issues    (:total (first (issue-state/total-planned-issues (:id upcomming-milestone))))

@@ -27,5 +27,4 @@
       product)))
 
 (defn delete [id]
-  (jdbc/delete! ds/db-spec :product ["id = ?" id])
-  id)
+  (jdbc/delete! ds/db-spec :product ["id = ?" id]) id)
