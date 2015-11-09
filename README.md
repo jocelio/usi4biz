@@ -1,6 +1,6 @@
 # usi4biz
 
-Usi4Biz means usability for business
+User Interaction For Business
 
 ## Prerequisites
 
@@ -27,5 +27,5 @@ To start a web server for the application, run:
 
 ## License
 
+GNU GENERAL PUBLIC LICENSE Version 3
 Copyright © 2015 Hildeberto Mendonça
-

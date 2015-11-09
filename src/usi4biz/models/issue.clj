@@ -1,7 +1,5 @@
-; Usi4Biz: User Interface For Business
+; Usi4Biz: User Interaction For Business
 ; Copyright (C) 2015 Hildeberto Mendonça
-;
-; Contact email: hildeberto@usi4biz.com
 ;
 ; This program is free software: you can redistribute it and/or modify
 ; it under the terms of the GNU General Public License as published by
@@ -16,7 +14,8 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program. If not, see http://www.gnu.org/licenses/.
 
-(ns usi4biz.models.issue
+(ns ^{:author "Hildeberto Mendonça - hildeberto.com"}
+  usi4biz.models.issue
   (:require [hikari-cp.core             :refer :all]
             [clojure.java.jdbc          :as jdbc]
             [usi4biz.datasource         :as ds]
