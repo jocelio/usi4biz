@@ -22,7 +22,6 @@
                  [joplin.jdbc                "0.2.9" ] ; Database migration for RDB
 
                  ; Utils
-                 [clj-time                   "0.11.0"] ; Date and time library
                  [bouncer                    "0.3.3" ] ; Validation library
                  [org.slf4j/slf4j-log4j12    "1.7.1" ] ; Logging library
                  [log4j/log4j                "1.2.17"  ; Logging library
