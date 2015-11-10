@@ -22,9 +22,12 @@
             [usi4biz.models.issue-state :as iss]
             [bouncer.validators         :as v]))
 
-(def assigning-types {:PLANNED            "PLANNED" ; as result of the sprint meeting
-                      :UNPLANNED          "UNPLANNED" ; something to be patched or undisciplined
-                      :UNPLANNED_APPROVED "UNPLANNED_APPROVED"}) ; unplanned but approved to be included with planned
+(def assigning-types {; as result of the sprint meeting
+                      :PLANNED            "PLANNED"
+                      ; something to be patched or undisciplined
+                      :UNPLANNED          "UNPLANNED"
+                      ; unplanned but approved to be included with planned
+                      :UNPLANNED_APPROVED "UNPLANNED_APPROVED"})
 
 (def priority-types {:IMPORTANT "IMPORTANT"
                      :ESSENTIAL "ESSENTIAL"
@@ -50,7 +53,8 @@
 (defn search [params]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
     (jdbc/query conn [(str "select i.id, i.name, i.milestone,
-                                   m.name as milestone_name, i.assignee,                                    a.first_name as assignee_name, i.priority,
+                                   m.name as milestone_name, i.assignee,
+                                   a.first_name as assignee_name, i.priority,
                                    i.reference, assigning_type
                             from issue i join milestone m on i.milestone = m.id
                                          join person a on i.assignee = a.id"

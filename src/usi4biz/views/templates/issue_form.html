@@ -1,0 +1,89 @@
+{% extends "usi4biz/views/templates/layout.html" %}
+{% block style %}
+<link rel="stylesheet" href="/css/bootstrap-datepicker3.min.css">
+<link rel="stylesheet" href="/css/bootstrap-timepicker.min.css">
+{% endblock %}
+{% block content %}
+<h2>Issue</h2>
+<form action="/milestones" method="POST">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save</button>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="product">Product</label>
+            <select name="product" id="product" class="form-control">
+              <option value="">Select...</option>
+              {% for product in products %}
+                <option value="{{ product.id }}" {% ifequal product.id milestone.product %}selected{% endifequal %}>{{ product.name }} - {{ product.acronym }}</option>
+              {% endfor %}
+            </select>
+            <p class="help-block-red">{{ error-product }}.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" class="form-control" value="{{ milestone.name }}"></input>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label for="name">Type</label><br>
+          <label class="radio-inline">
+            <input type="radio" name="type" id="type-major" value="{{ types.MAJOR }}" {% ifequal milestone.type "MAJOR" %}checked{% endifequal %}> Major
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="type" id="type-intermediary" value="{{ types.INTERMEDIARY }}" {% ifequal milestone.type "INTERMEDIARY" %}checked{% endifequal %}> Intermediary
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2">
+          <div class="form-group">
+            <label for="start_sprint">Sprint Starts</label>
+            <input type="text" name="start_sprint" id="start_sprint" class="form-control" value="{{ milestone.start_sprint|date:dd/MM/yyyy }}"></input>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label for="start_sprint">at</label>
+            <input type="text" name="start_sprint_time" id="start_sprint_time" class="form-control" value="{{ milestone.start_sprint|date:"HH:mm" }}"></input>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label for="start_sprint">Due to</label>
+            <input type="text" name="due_date" id="due_date" class="form-control" value="{{ milestone.due_date|date:dd/MM/yyyy }}"></input>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea name="description" id="description" class="form-control">{{ milestone.description }}</textarea>
+      </div>
+    </div>
+  </div>
+  <input type="hidden" name="id" value="{{ milestone.id }}">
+  <a href="/milestones/{{ milestone.id }}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Back</a>
+</form>
+{% endblock %}
+{% block script %}
+<script src="/js/bootstrap-datepicker.min.js"></script>
+<script src="/js/bootstrap-timepicker.min.js"></script>
+<script>
+  $("#start_sprint").datepicker({
+      format: "dd/mm/yyyy",
+      autoclose: true
+  });
+  $('#start_sprint_time').timepicker({
+    showMeridian: false
+  });
+  $("#due_date").datepicker({
+      format: "dd/mm/yyyy",
+      autoclose: true
+  });
+</script>
+{% endblock %}
