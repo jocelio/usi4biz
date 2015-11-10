@@ -1,19 +1,32 @@
-(ns usi4biz.models.person
+; Usi4Biz: User Interaction For Business
+; Copyright (C) 2015 Hildeberto Mendonça
+;
+; This program is free software: you can redistribute it and/or modify
+; it under the terms of the GNU General Public License as published by
+; the Free Software Foundation, either version 3 of the License, or
+; (at your option) any later version.
+;
+; This program is distributed in the hope that it will be useful,
+; but WITHOUT ANY WARRANTY; without even the implied warranty of
+; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+; GNU General Public License for more details.
+;
+; You should have received a copy of the GNU General Public License
+; along with this program. If not, see http://www.gnu.org/licenses/.
+
+(ns ^{:author "Hildeberto Mendonça - hildeberto.com"}
+  usi4biz.models.person
   (:require [hikari-cp.core     :refer :all]
             [clojure.java.jdbc  :as jdbc]
             [usi4biz.datasource :as ds]))
 
 (defrecord person [id first_name last_name email user_account])
 
-(defn find-all-persons []
+(defn find-all []
  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
-   (let [rows (jdbc/query conn ["select * from person"])]
-     rows)))
+   (jdbc/query conn ["select * from person order by first_name asc"])))
 
 (defn find-person [id]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
     (let [rows (jdbc/query conn ["select * from person where id = ?" id])]
       rows)))
-
-(defn create [person]
-  (jdbc/insert! ds/db-spec :person (assoc person :id (ds/unique-id))))

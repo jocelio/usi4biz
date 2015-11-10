@@ -22,13 +22,20 @@
           <option value="{{ milestone.id }}" {% ifequal milestone.id selected-milestone %}selected{% endifequal %}>{{ milestone.name }} - {{ milestone.acronym }}</option>
         {% endfor %}
       </select>
+      <select name="assignee" id="assignee" class="form-control">
+        <option value="">Assignees...</option>
+        {% for assignee in assignees %}
+          <option value="{{ assignee.id }}" {% ifequal assignee.id selected-assignee %}selected{% endifequal %}>{{ assignee.first_name }} {{ assignee.last_name }}</option>
+        {% endfor %}
+      </select>
+      <input type="text" name="reference" class="form-control" placeholder="Reference">
       <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search</button>
       <a href="/issues/form" class="btn btn-default pull-right"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New</a>
     </form>
   </div>
 
   <table class="table table-striped table-hover">
-    <thead>product reference name milestone assignee priority assigning_type
+    <thead>
       <th>Reference</th>
       <th>Name</th>
       <th>Assignee</th>
@@ -43,9 +50,9 @@
           <td><a href="/items/{{ item.id }}">{{ item.reference }}</a></td>
           <td>{{ item.name }}</td>
           <td>{{ item.assignee }}</td>
-          <td>{{ item.priority" }}</td>
-          <td>{{ item.product" }}</td>
-          <td>{{ item.milestone" }}</td>
+          <td>{{ item.priority }}</td>
+          <td>{{ item.product }}</td>
+          <td>{{ item.milestone }}</td>
           <td>{{ item.assigning_type }}</td>
         </tr>
       {% endfor %}
