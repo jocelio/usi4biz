@@ -23,7 +23,7 @@ Copy the file `resources/db-config-example.edn` with the name `resources/db-conf
 
 To start a web server for the application, run:
 
-    lein ring server
+    $ lein ring server
 
 ## License
 
