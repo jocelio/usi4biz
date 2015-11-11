@@ -1,9 +1,10 @@
-(ns usi4biz.routes.milestones
+(ns usi4biz.routes.issues
   (:require [compojure.core             :refer [defroutes context DELETE GET POST]]
             [selmer.parser              :as selmer]
             [usi4biz.models.product     :as product]
             [usi4biz.models.milestone   :as milestone]
             [usi4biz.models.issue       :as issue]
+            [usi4biz.models.person      :as person]
             [usi4biz.utils.templates    :refer :all]
             [usi4biz.datasource         :refer [format-date-db format-timestamp-db]]
             [bouncer.core               :as b]))
@@ -12,6 +13,7 @@
   (selmer/render-file (path-to "issues.html")
     {:products (product/find-all)
      :milestones (milestone/find-by-product (:product params))
+     :assignees (person/find-all)
      :issues (issue/search params)
      :selected-product (:product params)
      :selected-milestone (:milestone params)}))
@@ -24,15 +26,16 @@
     (if (b/valid? issue issue/validation-rules)
       (selmer/render-file (path-to "issues.html")
         {:issue  (issue/save issue)
-         :milestones (issue/find-by-product product)
+         :milestones (milestone/find-by-product (:product issue))
          :products (product/find-all)
-         :selected-product (:product milestone)
-         :selected-milestone (:milestone milestone)})
+         :selected-product (:product issue)
+         :selected-milestone (:milestone issue)
+         :selected-assignee (:assignee issue)})
       (selmer/render-file (path-to "issue_form.html")
         {:issue issue
          :products (product/find-all)
          :assigning-types issue/assigning-types
-         :priority-types issue/priority-types}))))
+         :priority-types issue/priority-types})))
 
 (defn issue-form
   ([]   (issue-form nil))
