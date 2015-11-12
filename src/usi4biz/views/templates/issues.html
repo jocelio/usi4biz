@@ -13,22 +13,22 @@
       <select name="product" id="product" class="form-control">
         <option value="">Products...</option>
         {% for product in products %}
-          <option value="{{ product.id }}" {% ifequal product.id selected-product %}selected{% endifequal %}>{{ product.name }} - {{ product.acronym }}</option>
+          <option value="{{ product.id }}" {% ifequal product.id params.product %}selected{% endifequal %}>{{ product.name }} - {{ product.acronym }}</option>
         {% endfor %}
       </select>
       <select name="milestone" id="milestone" class="form-control">
         <option value="">Milestones...</option>
         {% for milestone in milestones %}
-          <option value="{{ milestone.id }}" {% ifequal milestone.id selected-milestone %}selected{% endifequal %}>{{ milestone.name }}</option>
+          <option value="{{ milestone.id }}" {% ifequal milestone.id params.milestone %}selected{% endifequal %}>{{ milestone.name }}</option>
         {% endfor %}
       </select>
       <select name="assignee" id="assignee" class="form-control">
         <option value="">Assignees...</option>
         {% for assignee in assignees %}
-          <option value="{{ assignee.id }}" {% ifequal assignee.id selected-assignee %}selected{% endifequal %}>{{ assignee.first_name }} {{ assignee.last_name }}</option>
+          <option value="{{ assignee.id }}" {% ifequal assignee.id params.assignee %}selected{% endifequal %}>{{ assignee.first_name }} {{ assignee.last_name }}</option>
         {% endfor %}
       </select>
-      <input type="text" name="reference" class="form-control" placeholder="Reference">
+      <input type="text" name="reference" class="form-control" placeholder="Reference" value="{{ params.reference }}">
       <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search</button>
       <a href="/issues/form" class="btn btn-default pull-right"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New</a>
     </form>

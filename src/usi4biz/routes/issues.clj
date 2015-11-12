@@ -15,8 +15,7 @@
      :milestones (milestone/find-by-product (:product params))
      :assignees (person/find-all)
      :issues (issue/search params)
-     :selected-product (:product params)
-     :selected-milestone (:milestone params)}))
+     :params params}))
 
 (defn issue [id]
       (selmer/render-file (path-to "issue.html")

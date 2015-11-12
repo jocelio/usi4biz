@@ -55,19 +55,21 @@
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
     (jdbc/query conn [(str "select i.id, i.name, i.milestone,
                                    m.name as milestone_name, i.assignee,
-                                   a.first_name as assignee_name, i.priority,
+                                   concat(a.first_name, ' ', a.last_name) as assignee_name, i.priority,
                                    i.reference, assigning_type
                             from issue i join milestone m on i.milestone = m.id
                                          join person a on i.assignee = a.id"
                             (if (empty? params)
                               " where i.assignee is null or i.milestone is null"
                               " where i.id is not null")
-                            (if (not (blank? (:product params)))
-                              (str " and i.product = '" (:product params) "'"))
-                            (if (not (blank? (:milestone params)))
-                              (str " and i.milestone = " (:milestone params)))
-                            (if (not (blank? (:assignee params)))
-                              (str " and i.assignee = " (:assignee params))))])))
+                            (if (blank? (:reference params))
+                              (str (if (not (blank? (:product params)))
+                                     (str " and i.product = '" (:product params) "'"))
+                                   (if (not (blank? (:milestone params)))
+                                     (str " and i.milestone = '" (:milestone params) "'"))
+                                   (if (not (blank? (:assignee params)))
+                                     (str " and i.assignee = '" (:assignee params) "'")))
+                              (str " and UPPER(i.reference) = '" (upper-case (:reference params)) "'")))])))
 
 (defn find-by-reference [reference]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
