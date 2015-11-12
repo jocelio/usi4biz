@@ -32,7 +32,7 @@
 
 (defn find-all []
  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
-   (jdbc/query conn ["select * from product"])))
+   (jdbc/query conn ["select * from product order by name asc"])))
 
 (defn save [a-product]
   (if (empty? (:id a-product))

@@ -36,7 +36,7 @@
           <td>{{ milestone.description }}</td>
           <td>{{ milestone.start_sprint|date:"dd/MM/yyyy HH:mm" }}</td>
           <td>{{ milestone.due_date|date:"dd/MM/yyyy" }}</td>
-          <td>{{ milestone.type }}</td>
+          <td>{{ milestone.type|title }}</td>
         </tr>
       {% endfor %}
     </tbody>

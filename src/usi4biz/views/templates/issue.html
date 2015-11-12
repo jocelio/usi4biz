@@ -3,7 +3,7 @@
 <h2>Issue</h2>
 <div class="panel panel-default">
   <div class="panel-heading">
-    <a href="/milestones/{{ milestone.id }}/form" class="btn btn-default"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>
+    <a href="/issues/{{ issue.id }}/form" class="btn btn-default"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>
     <a href="" class="btn btn-danger" id="remove"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove</a>
   </div>
   <div class="panel-body">
@@ -11,7 +11,7 @@
       <div class="col-md-4">
         <div class="form-group">
           <b>Product</b>
-          <p><a href="/products/{{ milestone.product }}">{{ milestone.product_name }}</a></p>
+          <p><a href="/products/{{ milestone.product }}">{{ issue.product_name }}</a></p>
         </div>
       </div>
       <div class="col-md-4">

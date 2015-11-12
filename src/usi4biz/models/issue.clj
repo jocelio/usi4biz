@@ -18,6 +18,7 @@
   usi4biz.models.issue
   (:require [hikari-cp.core             :refer :all]
             [clojure.java.jdbc          :as jdbc]
+            [clojure.string             :refer :all]
             [usi4biz.datasource         :as ds]
             [usi4biz.models.issue-state :as iss]
             [bouncer.validators         :as v]))
@@ -61,11 +62,11 @@
                             (if (empty? params)
                               " where i.assignee is null or i.milestone is null"
                               " where i.id is not null")
-                            (if (contains? params :product)
-                              (str " and i.product = " (:product params)))
-                            (if (contains? params :milestone)
+                            (if (not (blank? (:product params)))
+                              (str " and i.product = '" (:product params) "'"))
+                            (if (not (blank? (:milestone params)))
                               (str " and i.milestone = " (:milestone params)))
-                            (if (contains? params :assignee)
+                            (if (not (blank? (:assignee params)))
                               (str " and i.assignee = " (:assignee params))))])))
 
 (defn find-by-reference [reference]

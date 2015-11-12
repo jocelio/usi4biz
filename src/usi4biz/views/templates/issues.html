@@ -19,7 +19,7 @@
       <select name="milestone" id="milestone" class="form-control">
         <option value="">Milestones...</option>
         {% for milestone in milestones %}
-          <option value="{{ milestone.id }}" {% ifequal milestone.id selected-milestone %}selected{% endifequal %}>{{ milestone.name }} - {{ milestone.acronym }}</option>
+          <option value="{{ milestone.id }}" {% ifequal milestone.id selected-milestone %}selected{% endifequal %}>{{ milestone.name }}</option>
         {% endfor %}
       </select>
       <select name="assignee" id="assignee" class="form-control">
@@ -40,20 +40,18 @@
       <th>Name</th>
       <th>Assignee</th>
       <th>Priority</th>
-      <th>Product</th>
       <th>Milestone</th>
       <th>Type</th>
     </thead>
     <tbody>
-      {% for item in items %}
+      {% for issue in issues %}
         <tr>
-          <td><a href="/items/{{ item.id }}">{{ item.reference }}</a></td>
-          <td>{{ item.name }}</td>
-          <td>{{ item.assignee }}</td>
-          <td>{{ item.priority }}</td>
-          <td>{{ item.product }}</td>
-          <td>{{ item.milestone }}</td>
-          <td>{{ item.assigning_type }}</td>
+          <td><a href="/issues/{{ issue.id }}">{{ issue.reference }}</a></td>
+          <td>{{ issue.name }}</td>
+          <td>{{ issue.assignee_name }}</td>
+          <td>{{ issue.priority|title }}</td>
+          <td>{{ issue.milestone_name }}</td>
+          <td>{{ issue.assigning_type|title }}</td>
         </tr>
       {% endfor %}
     </tbody>
