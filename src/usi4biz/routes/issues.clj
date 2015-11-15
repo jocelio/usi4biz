@@ -19,7 +19,7 @@
 
 (defn issue [id]
       (selmer/render-file (path-to "issue.html")
-        {:issue (milestone/find id)}))
+        {:issue (issue/find id)}))
 
 (defn save-issue [issue]
     (if (b/valid? issue issue/validation-rules)
@@ -39,12 +39,15 @@
 (defn issue-form
   ([]   (issue-form nil))
   ([id] (selmer/render-file (path-to "issue_form.html")
-          (let [response {:products (product/find-all)
+          (let [issue (issue/find id)
+                response {:products (product/find-all)
+                          :milestones (milestone/find-by-product (:product issue))
+                          :assignees (person/find-all)
                           :assigning-types issue/assigning-types
                           :priority-types issue/priority-types}]
             (if (nil? id)
               response
-              (assoc response :issue (issue/find id)))))))
+              (assoc response :issue issue))))))
 
 (defroutes routes
   (context "/issues" []

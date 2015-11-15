@@ -5,12 +5,23 @@
 {% endblock %}
 {% block content %}
 <h2>Issue</h2>
-<form action="/milestones" method="POST">
+<form action="/issues" method="POST">
   <div class="panel panel-default">
-    <div class="panel-heading">
-      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save</button>
-    </div>
     <div class="panel-body">
+      <div class="row">
+        <div class="col-md-2">
+          <div class="form-group">
+            <label for="name">Reference</label>
+            <input type="text" name="reference" id="reference" class="form-control" value="{{ issue.reference }}"></input>
+          </div>
+        </div>
+        <div class="col-md-10">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" class="form-control" value="{{ issue.name }}"></input>
+          </div>
+        </div>
+      </div>
       <div class="row">
         <div class="col-md-4">
           <div class="form-group">
@@ -18,7 +29,7 @@
             <select name="product" id="product" class="form-control">
               <option value="">Select...</option>
               {% for product in products %}
-                <option value="{{ product.id }}" {% ifequal product.id milestone.product %}selected{% endifequal %}>{{ product.name }} - {{ product.acronym }}</option>
+                <option value="{{ product.id }}" {% ifequal product.id issue.product %}selected{% endifequal %}>{{ product.name }} - {{ product.acronym }}</option>
               {% endfor %}
             </select>
             <p class="help-block-red">{{ error-product }}.</p>
@@ -26,64 +37,59 @@
         </div>
         <div class="col-md-4">
           <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" name="name" id="name" class="form-control" value="{{ milestone.name }}"></input>
+            <label for="product">Milestone</label>
+            <select name="milestone" id="milestone" class="form-control">
+              <option value="">Select...</option>
+              {% for milestone in milestones %}
+                <option value="{{ milestone.id }}" {% ifequal milestone.id issue.milestone %}selected{% endifequal %}>{{ milestone.name }}</option>
+              {% endfor %}
+            </select>
           </div>
         </div>
         <div class="col-md-4">
-          <label for="name">Type</label><br>
-          <label class="radio-inline">
-            <input type="radio" name="type" id="type-major" value="{{ types.MAJOR }}" {% ifequal milestone.type "MAJOR" %}checked{% endifequal %}> Major
-          </label>
-          <label class="radio-inline">
-            <input type="radio" name="type" id="type-intermediary" value="{{ types.INTERMEDIARY }}" {% ifequal milestone.type "INTERMEDIARY" %}checked{% endifequal %}> Intermediary
-          </label>
+          <div class="form-group">
+            <label for="product">Assignee</label>
+            <select name="assignee" id="assignee" class="form-control">
+              <option value="">Select...</option>
+              {% for assignee in assignees %}
+                <option value="{{ assignee.id }}" {% ifequal assignee.id issue.assignee %}selected{% endifequal %}>{{ assignee.first_name }}</option>
+              {% endfor %}
+            </select>
+          </div>
         </div>
       </div>
       <div class="row">
-        <div class="col-md-2">
-          <div class="form-group">
-            <label for="start_sprint">Sprint Starts</label>
-            <input type="text" name="start_sprint" id="start_sprint" class="form-control" value="{{ milestone.start_sprint|date:dd/MM/yyyy }}"></input>
-          </div>
+        <div class="col-md-6">
+          <label for="name">Priority</label><br>
+          <label class="radio-inline">
+            <input type="radio" name="priority" id="priority-important" value="{{ priority-types.IMPORTANT }}" {% ifequal issue.priority "IMPORTANT" %}checked{% endifequal %}> Important
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="priority" id="priority-essential" value="{{ priority-types.ESSENTIAL }}" {% ifequal issue.priority "ESSENTIAL" %}checked{% endifequal %}> Essential
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="priority" id="priority-blocking" value="{{ priority-types.BLOCKING }}" {% ifequal issue.priority "BLOCKING" %}checked{% endifequal %}> Blocking
+          </label>
         </div>
-        <div class="col-md-2">
-          <div class="form-group">
-            <label for="start_sprint">at</label>
-            <input type="text" name="start_sprint_time" id="start_sprint_time" class="form-control" value="{{ milestone.start_sprint|date:"HH:mm" }}"></input>
-          </div>
+        <div class="col-md-6">
+          <label for="name">Assigning Type</label><br>
+          <label class="radio-inline">
+            <input type="radio" name="type" id="assigning-planned" value="{{ assigning-types.PLANNED }}" {% ifequal issue.assigning_type "PLANNED" %}checked{% endifequal %}> Planned
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="type" id="assigning-unplanned" value="{{ assigning-types.UNPLANNED }}" {% ifequal issue.assigning_type "UNPLANNED" %}checked{% endifequal %}> Unplanned
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="type" id="assigning-unplanned-approved" value="{{ assigning-types.UNPLANNED_APPROVED }}" {% ifequal issue.assigning_type "UNPLANNED_APPROVED" %}checked{% endifequal %}> Unplanned Approved
+          </label>
         </div>
-        <div class="col-md-2">
-          <div class="form-group">
-            <label for="start_sprint">Due to</label>
-            <input type="text" name="due_date" id="due_date" class="form-control" value="{{ milestone.due_date|date:dd/MM/yyyy }}"></input>
-          </div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="description">Description</label>
-        <textarea name="description" id="description" class="form-control">{{ milestone.description }}</textarea>
       </div>
     </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save</button>
+    </div>
   </div>
-  <input type="hidden" name="id" value="{{ milestone.id }}">
-  <a href="/milestones/{{ milestone.id }}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Back</a>
+  <input type="hidden" name="id" value="{{ issue.id }}">
+  <a href="/issues/{{ issue.id }}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Back</a>
 </form>
-{% endblock %}
-{% block script %}
-<script src="/js/bootstrap-datepicker.min.js"></script>
-<script src="/js/bootstrap-timepicker.min.js"></script>
-<script>
-  $("#start_sprint").datepicker({
-      format: "dd/mm/yyyy",
-      autoclose: true
-  });
-  $('#start_sprint_time').timepicker({
-    showMeridian: false
-  });
-  $("#due_date").datepicker({
-      format: "dd/mm/yyyy",
-      autoclose: true
-  });
-</script>
 {% endblock %}
