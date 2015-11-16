@@ -12,4 +12,14 @@ $(function() {
       });
     }
   });
+
+  $("#product").on('change', function() {
+    selectValues = { "1": "test 1", "2": "test 2" };
+    $.each(selectValues, function(key, value) {
+      $('#milestone')
+        .append($("<option></option>")
+        .attr("value",key)
+        .text(value));
+      });
+  });
 });
