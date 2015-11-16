@@ -14,12 +14,20 @@ $(function() {
   });
 
   $("#product").on('change', function() {
-    selectValues = { "1": "test 1", "2": "test 2" };
-    $.each(selectValues, function(key, value) {
-      $('#milestone')
-        .append($("<option></option>")
-        .attr("value",key)
-        .text(value));
-      });
+    $("#milestone").find("option")
+                   .remove()
+                   .end()
+                   .append('<option value="">Milestones...</option>')
+                   .val('')
+    $.ajax({
+      url: "http://localhost:3000/api/milestones?product=" + $("#product").val()
+    }).then(function(data) {
+      $.each(data, function(key, value) {
+        $('#milestone')
+          .append($("<option></option>")
+          .attr("value",key.id)
+          .text(value.name));
+        });
+    });
   });
 });

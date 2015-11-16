@@ -27,7 +27,7 @@
           <div class="form-group">
             <label for="product">Product</label>
             <select name="product" id="product" class="form-control">
-              <option value="">Select...</option>
+              <option value="">Products...</option>
               {% for product in products %}
                 <option value="{{ product.id }}" {% ifequal product.id issue.product %}selected{% endifequal %}>{{ product.name }} - {{ product.acronym }}</option>
               {% endfor %}
@@ -39,7 +39,7 @@
           <div class="form-group">
             <label for="product">Milestone</label>
             <select name="milestone" id="milestone" class="form-control">
-              <option value="">Select...</option>
+              <option value="">Milestones...</option>
               {% for milestone in milestones %}
                 <option value="{{ milestone.id }}" {% ifequal milestone.id issue.milestone %}selected{% endifequal %}>{{ milestone.name }}</option>
               {% endfor %}
@@ -50,7 +50,7 @@
           <div class="form-group">
             <label for="product">Assignee</label>
             <select name="assignee" id="assignee" class="form-control">
-              <option value="">Select...</option>
+              <option value="">Assignees...</option>
               {% for assignee in assignees %}
                 <option value="{{ assignee.id }}" {% ifequal assignee.id issue.assignee %}selected{% endifequal %}>{{ assignee.first_name }}</option>
               {% endfor %}
