@@ -3,9 +3,6 @@
 <h2>Product</h2>
 <form action="/products" method="POST">
   <div class="panel panel-default">
-    <div class="panel-heading">
-      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save</button>
-    </div>
     <div class="panel-body">
       <div class="row">
         <div class="col-md-3">
@@ -27,6 +24,9 @@
         <textarea name="description" id="description" class="form-control">{{ product.description }}</textarea>
       </div>
       <input type="hidden" name="id" value="{{ product.id }}">
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save</button>
     </div>
   </div>
   <a href="/products/{{ product.id }}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Back</a>

@@ -74,13 +74,13 @@
         <div class="col-md-6">
           <label for="name">Assigning Type</label><br>
           <label class="radio-inline">
-            <input type="radio" name="type" id="assigning-planned" value="{{ assigning-types.PLANNED }}" {% ifequal issue.assigning_type "PLANNED" %}checked{% endifequal %}> Planned
+            <input type="radio" name="assigning_type" id="assigning-planned" value="{{ assigning-types.PLANNED }}" {% ifequal issue.assigning_type "PLANNED" %}checked{% endifequal %}> Planned
           </label>
           <label class="radio-inline">
-            <input type="radio" name="type" id="assigning-unplanned" value="{{ assigning-types.UNPLANNED }}" {% ifequal issue.assigning_type "UNPLANNED" %}checked{% endifequal %}> Unplanned
+            <input type="radio" name="assigning_type" id="assigning-unplanned" value="{{ assigning-types.UNPLANNED }}" {% ifequal issue.assigning_type "UNPLANNED" %}checked{% endifequal %}> Unplanned
           </label>
           <label class="radio-inline">
-            <input type="radio" name="type" id="assigning-unplanned-approved" value="{{ assigning-types.UNPLANNED_APPROVED }}" {% ifequal issue.assigning_type "UNPLANNED_APPROVED" %}checked{% endifequal %}> Unplanned Approved
+            <input type="radio" name="assigning_type" id="assigning-unplanned-approved" value="{{ assigning-types.UNPLANNED_APPROVED }}" {% ifequal issue.assigning_type "UNPLANNED_APPROVED" %}checked{% endifequal %}> Unplanned Approved
           </label>
         </div>
       </div>

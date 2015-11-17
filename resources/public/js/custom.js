@@ -25,7 +25,7 @@ $(function() {
       $.each(data, function(key, value) {
         $('#milestone')
           .append($("<option></option>")
-          .attr("value",key.id)
+          .attr("value", value.id)
           .text(value.name));
         });
     });
