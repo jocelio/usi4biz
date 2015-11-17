@@ -12,4 +12,22 @@ $(function() {
       });
     }
   });
+
+  $("#product").on('change', function() {
+    $("#milestone").find("option")
+                   .remove()
+                   .end()
+                   .append('<option value="">Milestones...</option>')
+                   .val('')
+    $.ajax({
+      url: "http://localhost:3000/api/milestones?product=" + $("#product").val()
+    }).then(function(data) {
+      $.each(data, function(key, value) {
+        $('#milestone')
+          .append($("<option></option>")
+          .attr("value", value.id)
+          .text(value.name));
+        });
+    });
+  });
 });

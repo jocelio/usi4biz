@@ -22,15 +22,11 @@
 
 (defrecord person [id first_name last_name email user_account])
 
-(defn find-all-persons []
+(defn find-all []
  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
-   (let [rows (jdbc/query conn ["select * from person"])]
-     rows)))
+   (jdbc/query conn ["select * from person order by first_name asc"])))
 
 (defn find-person [id]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
     (let [rows (jdbc/query conn ["select * from person where id = ?" id])]
       rows)))
-
-(defn create [person]
-  (jdbc/insert! ds/db-spec :person (assoc person :id (ds/unique-id))))

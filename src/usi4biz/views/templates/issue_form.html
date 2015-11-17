@@ -1,0 +1,95 @@
+{% extends "usi4biz/views/templates/layout.html" %}
+{% block style %}
+<link rel="stylesheet" href="/css/bootstrap-datepicker3.min.css">
+<link rel="stylesheet" href="/css/bootstrap-timepicker.min.css">
+{% endblock %}
+{% block content %}
+<h2>Issue</h2>
+<form action="/issues" method="POST">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-2">
+          <div class="form-group">
+            <label for="name">Reference</label>
+            <input type="text" name="reference" id="reference" class="form-control" value="{{ issue.reference }}"></input>
+          </div>
+        </div>
+        <div class="col-md-10">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" class="form-control" value="{{ issue.name }}"></input>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="product">Product</label>
+            <select name="product" id="product" class="form-control">
+              <option value="">Products...</option>
+              {% for product in products %}
+                <option value="{{ product.id }}" {% ifequal product.id issue.product %}selected{% endifequal %}>{{ product.name }} - {{ product.acronym }}</option>
+              {% endfor %}
+            </select>
+            <p class="help-block-red">{{ error-product }}.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="product">Milestone</label>
+            <select name="milestone" id="milestone" class="form-control">
+              <option value="">Milestones...</option>
+              {% for milestone in milestones %}
+                <option value="{{ milestone.id }}" {% ifequal milestone.id issue.milestone %}selected{% endifequal %}>{{ milestone.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="product">Assignee</label>
+            <select name="assignee" id="assignee" class="form-control">
+              <option value="">Assignees...</option>
+              {% for assignee in assignees %}
+                <option value="{{ assignee.id }}" {% ifequal assignee.id issue.assignee %}selected{% endifequal %}>{{ assignee.first_name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <label for="name">Priority</label><br>
+          <label class="radio-inline">
+            <input type="radio" name="priority" id="priority-important" value="{{ priority-types.IMPORTANT }}" {% ifequal issue.priority "IMPORTANT" %}checked{% endifequal %}> Important
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="priority" id="priority-essential" value="{{ priority-types.ESSENTIAL }}" {% ifequal issue.priority "ESSENTIAL" %}checked{% endifequal %}> Essential
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="priority" id="priority-blocking" value="{{ priority-types.BLOCKING }}" {% ifequal issue.priority "BLOCKING" %}checked{% endifequal %}> Blocking
+          </label>
+        </div>
+        <div class="col-md-6">
+          <label for="name">Assigning Type</label><br>
+          <label class="radio-inline">
+            <input type="radio" name="assigning_type" id="assigning-planned" value="{{ assigning-types.PLANNED }}" {% ifequal issue.assigning_type "PLANNED" %}checked{% endifequal %}> Planned
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="assigning_type" id="assigning-unplanned" value="{{ assigning-types.UNPLANNED }}" {% ifequal issue.assigning_type "UNPLANNED" %}checked{% endifequal %}> Unplanned
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="assigning_type" id="assigning-unplanned-approved" value="{{ assigning-types.UNPLANNED_APPROVED }}" {% ifequal issue.assigning_type "UNPLANNED_APPROVED" %}checked{% endifequal %}> Unplanned Approved
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save</button>
+    </div>
+  </div>
+  <input type="hidden" name="id" value="{{ issue.id }}">
+  <a href="/issues/{{ issue.id }}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Back</a>
+</form>
+{% endblock %}

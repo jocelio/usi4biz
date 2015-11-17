@@ -1,24 +1,60 @@
 {% extends "usi4biz/views/templates/layout.html" %}
 {% block content %}
 <h2>Issues</h2>
-<form class="navbar-form navbar-left" role="search">
-    <div class="form-group">
-        <div class="input-group">
-            <span class="input-group-addon">#</span>
-            <input type="text" class="form-control" placeholder="Issue">
-        </div>
+{% if issue|not-empty %}
+  <div class="alert alert-success alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>{{ issue.name }}</strong> registered successfully!
+  </div>
+{% endif %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <form class="form-inline" method="get" action="/issues">
+      <select name="product" id="product" class="form-control">
+        <option value="">Products...</option>
+        {% for product in products %}
+          <option value="{{ product.id }}" {% ifequal product.id params.product %}selected{% endifequal %}>{{ product.name }} - {{ product.acronym }}</option>
+        {% endfor %}
+      </select>
+      <select name="milestone" id="milestone" class="form-control">
+        <option value="">Milestones...</option>
+        {% for milestone in milestones %}
+          <option value="{{ milestone.id }}" {% ifequal milestone.id params.milestone %}selected{% endifequal %}>{{ milestone.name }}</option>
+        {% endfor %}
+      </select>
+      <select name="assignee" id="assignee" class="form-control">
+        <option value="">Assignees...</option>
+        {% for assignee in assignees %}
+          <option value="{{ assignee.id }}" {% ifequal assignee.id params.assignee %}selected{% endifequal %}>{{ assignee.first_name }} {{ assignee.last_name }}</option>
+        {% endfor %}
+      </select>
+      <input type="text" name="reference" class="form-control" placeholder="Reference" value="{{ params.reference }}">
+      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search</button>
+      <a href="/issues/form" class="btn btn-default pull-right"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New</a>
+    </form>
+  </div>
 
-        <select class="form-control">
-            <option value="">15.10.1.0</option>
-            <option value="">15.10.2.0</option>
-        </select>
-
-        <select class="form-control">
-            <option value="PLANNED">Planned</option>
-            <option value="UNPLANNED">Unplanned</option>
-            <option value="UNPLANNED_APPROVED">Unplanned but Approved</option>
-        </select>
-    </div>
-    <button type="submit" class="btn btn-default">Search</button>
-</form>
+  <table class="table table-striped table-hover">
+    <thead>
+      <th>Reference</th>
+      <th>Name</th>
+      <th>Assignee</th>
+      <th>Priority</th>
+      <th>Milestone</th>
+      <th>Type</th>
+    </thead>
+    <tbody>
+      {% for issue in issues %}
+        <tr>
+          <td><a href="/issues/{{ issue.id }}">{{ issue.reference }}</a></td>
+          <td>{{ issue.name }}</td>
+          <td>{{ issue.assignee_name }}</td>
+          <td>{{ issue.priority|title }}</td>
+          <td>{{ issue.milestone_name }}</td>
+          <td>{{ issue.assigning_type|title }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}

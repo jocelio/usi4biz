@@ -17,6 +17,8 @@
 (ns ^{:author "Hildeberto Mendonça - hildeberto.com"}
   usi4biz.routes.milestones
   (:require [compojure.core             :refer [defroutes context DELETE GET POST]]
+            [liberator.core             :refer [defresource]]
+            [clojure.data.json          :as json]
             [selmer.parser              :as selmer]
             [usi4biz.models.milestone   :as milestone]
             [usi4biz.models.product     :as product]
@@ -54,6 +56,12 @@
          :types milestone/types
          :error-product (first (:product (first (b/validate milestone milestone/validation-rules))))}))))
 
+(defresource find-by-product [product-id]
+  :available-media-types ["application/json"]
+  :handle-ok (fn [_]
+               (let [milestones (milestone/find-by-product product-id)]
+                  (json/write-str milestones))));(reduce #(assoc %1 (:id %2) (:name %2)) {} milestones)))))
+
 (defn milestone-form
   ([]   (milestone-form nil))
   ([id] (selmer/render-file (path-to "milestone_form.html")
@@ -75,4 +83,8 @@
           (milestone-form id))
     (POST "/" [id product name description, start_sprint, start_sprint_time, due_date, type]
           (save-milestone id product name description, start_sprint, start_sprint_time, due_date, type))
-    (DELETE "/:id{[A-Z_0-9]{32}}" [id] (milestone/delete id))))
+    (DELETE "/:id{[A-Z_0-9]{32}}" [id] (milestone/delete id)))
+
+  (context "/api/milestones" []
+    (GET "/" {params :params}
+         (find-by-product (:product params)))))

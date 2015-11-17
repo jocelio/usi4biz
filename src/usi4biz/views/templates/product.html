@@ -2,11 +2,6 @@
 {% block content %}
 <h2>Product</h2>
 <div class="panel panel-default">
-  <div class="panel-heading">
-    <a href="/products/{{ product.id }}/form" class="btn btn-default"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>
-    <a href="/products/{{ product.id }}/presentation" class="btn btn-info"><span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span> Start Presentation</a>
-    <a href="" class="btn btn-danger" id="remove"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove</a>
-  </div>
   <div class="panel-body">
     <div class="row">
       <div class="col-md-3">
@@ -26,6 +21,11 @@
       <b>Description</b>
       <p>{{ product.description }}</p>
     </div>
+  </div>
+  <div class="panel-footer">
+    <a href="/products/{{ product.id }}/form" class="btn btn-default"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>
+    <a href="/products/{{ product.id }}/presentation" class="btn btn-info"><span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span> Start Presentation</a>
+    <a href="" class="btn btn-danger" id="remove"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove</a>
   </div>
 </div>
 <a href="/products"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Back</a>

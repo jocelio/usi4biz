@@ -1,0 +1,61 @@
+{% extends "usi4biz/views/templates/layout.html" %}
+{% block content %}
+<h2>Issue</h2>
+<div class="panel panel-default">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-2">
+        <div class="form-group">
+          <b>Reference</b>
+          <p>{{ issue.reference }}</p>
+        </div>
+      </div>
+      <div class="col-md-10">
+        <div class="form-group">
+          <b>Name</b>
+          <p>{{ issue.name }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="form-group">
+          <b>Product</b>
+          <p><a href="/products/{{ issue.product }}">{{ issue.product_name }}</a></p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <b>Milestone</b>
+          <p><a href="/milestones/{{ issue.milestone }}">{{ issue.milestone_name }}</a></p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <b>Assignee</b>
+          <p><a href="/assignees/{{ issue.assignee }}">{{ issue.assignee_name }}</a></p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <b>Priority</b>
+          <p>{{ issue.priority|title }}</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <b>Assigning Type</b>
+          <p>{{ issue.assigning_type|title }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel-footer">
+    <a href="/issues/{{ issue.id }}/form" class="btn btn-default"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>
+    <a href="" class="btn btn-danger" id="remove"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove</a>
+  </div>
+</div>
+<a href="/issues?product={{ milestone.product }}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Back</a>
+{% endblock %}

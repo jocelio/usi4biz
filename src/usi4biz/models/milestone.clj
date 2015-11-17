@@ -38,7 +38,7 @@
 
 (defn find-by-product [product-id]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
-    (jdbc/query conn ["select * from milestone where product = ? order by due_date desc" product-id])))
+    (jdbc/query conn ["select id, name from milestone where product = ? order by due_date desc" product-id])))
 
 (defn upcomming-milestone []
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
