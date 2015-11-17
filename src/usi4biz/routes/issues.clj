@@ -27,12 +27,15 @@
         {:issue  (issue/save issue)
          :milestones (milestone/find-by-product (:product issue))
          :products (product/find-all)
+         :assignees (person/find-all)
          :selected-product (:product issue)
          :selected-milestone (:milestone issue)
          :selected-assignee (:assignee issue)})
       (selmer/render-file (path-to "issue_form.html")
         {:issue issue
          :products (product/find-all)
+         :milestones (milestone/find-by-product (:product issue))
+         :assignees (person/find-all)
          :assigning-types issue/assigning-types
          :priority-types issue/priority-types})))
 
