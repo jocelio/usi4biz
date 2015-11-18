@@ -22,12 +22,11 @@
             [usi4biz.models.milestone :as milestone]
             [usi4biz.utils.calendar   :as calendar]))
 
-(def states {:CREATED  "CREATED"  ; when an issue is created
-             :ASSIGNED "ASSIGNED" ; when an issue has an assignee and a milestone
-             :FINISHED "FINISHED" ; when the work on an issue is finished
-             :CLOSED   "CLOSED"   ; when the work on an issue is recognized as finished
-             :CANCELED "CANCELED" ; when an issue can not be done for any reason
-             })
+(def states {:CREATED  "CREATED"    ; when an issue is created
+             :ASSIGNED "ASSIGNED"   ; when an issue has an assignee and a milestone
+             :FINISHED "FINISHED"   ; when the work on an issue is finished
+             :CLOSED   "CLOSED"     ; when the work on an issue is recognized as finished
+             :CANCELED "CANCELED"}) ; when an issue can not be done for any reason
 
 (defrecord issue-state [id issue state set_date])
 

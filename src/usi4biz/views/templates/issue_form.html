@@ -84,6 +84,52 @@
           </label>
         </div>
       </div>
+      <br>
+      <div class="panel panel-default">
+        <div class="panel-heading">Status</div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="name">Status</label>
+                <select name="state" id="state" class="form-control">
+                    <option value="{{ states.CREATED }}">{{ states.CREATED|title }}</option>
+                    <option value="{{ states.ASSIGNED }}">{{ states.ASSIGNED|title }}</option>
+                    <option value="{{ states.FINISHED }}">{{ states.FINISHED|title }}</option>
+                    <option value="{{ states.CLOSED }}">{{ states.CLOSED|title }}</option>
+                    <option value="{{ states.CANCELED }}">{{ states.CANCELED|title }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="name">When</label>
+                <input type="text" name="set_date" id="set_date" class="form-control" value="{{ issue.set_date|date:"dd/MM/yyyy" }}"></input>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="start_sprint">at</label>
+                <input type="text" name="set_date_time" id="set_date_time" class="form-control" value="{{ issue.set_date|date:"HH:mm" }}"></input>
+              </div>
+            </div>
+          </div>
+        </div>
+        <table class="table table-striped table-hover">
+          <thead>
+            <th>Status</th>
+            <th>Date</th>
+          </thead>
+          <tbody>
+            {% for state in issue-states %}
+              <tr>
+                <td>{{ state.state|title }}</td>
+                <td>{{ state.set_date|date:"dd/MM/yyyy HH:mm" }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save</button>
@@ -91,4 +137,18 @@
   </div>
   <input type="hidden" name="id" value="{{ issue.id }}">
 </form>
+{% endblock %}
+
+{% block script %}
+<script src="/js/bootstrap-datepicker.min.js"></script>
+<script src="/js/bootstrap-timepicker.min.js"></script>
+<script>
+  $("#set_date").datepicker({
+      format: "dd/mm/yyyy",
+      autoclose: true
+  });
+  $('#set_date_time').timepicker({
+    showMeridian: false
+  });
+</script>
 {% endblock %}

@@ -61,15 +61,15 @@
                                          join person a on i.assignee = a.id"
                             (if (empty? params)
                               " where i.assignee is null or i.milestone is null"
-                              " where i.id is not null")
-                            (if (blank? (:reference params))
-                              (str (if (not (blank? (:product params)))
-                                     (str " and i.product = '" (:product params) "'"))
-                                   (if (not (blank? (:milestone params)))
-                                     (str " and i.milestone = '" (:milestone params) "'"))
-                                   (if (not (blank? (:assignee params)))
-                                     (str " and i.assignee = '" (:assignee params) "'")))
-                              (str " and UPPER(i.reference) = '" (upper-case (:reference params)) "'")))])))
+                              (str " where i.id is not null"
+                                  (if (blank? (:reference params))
+                                    (str (if (not (blank? (:product params)))
+                                           (str " and i.product = '" (:product params) "'"))
+                                         (if (not (blank? (:milestone params)))
+                                           (str " and i.milestone = '" (:milestone params) "'"))
+                                         (if (not (blank? (:assignee params)))
+                                           (str " and i.assignee = '" (:assignee params) "'")))
+                                    (str " and UPPER(i.reference) = '" (upper-case (:reference params)) "'")))))])))
 
 (defn find-by-reference [reference]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]

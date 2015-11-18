@@ -21,7 +21,7 @@
 (defn issue [id]
       (selmer/render-file (path-to "issue.html")
         {:issue (issue/find id)
-         :states (issue-state/find-by-issue id)}))
+         :issue-states (issue-state/find-by-issue id)}))
 
 (defn save-issue [issue]
     (if (b/valid? issue issue/validation-rules)
@@ -49,7 +49,9 @@
                           :milestones (milestone/find-by-product (:product issue))
                           :assignees (person/find-all)
                           :assigning-types issue/assigning-types
-                          :priority-types issue/priority-types}]
+                          :priority-types issue/priority-types
+                          :states issue-state/states
+                          :issue-states (issue-state/find-by-issue id)}]
             (if (nil? id)
               response
               (assoc response :issue issue))))))
