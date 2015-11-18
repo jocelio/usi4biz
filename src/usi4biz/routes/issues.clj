@@ -4,6 +4,7 @@
             [usi4biz.models.product     :as product]
             [usi4biz.models.milestone   :as milestone]
             [usi4biz.models.issue       :as issue]
+            [usi4biz.models.issue-state :as issue-state]
             [usi4biz.models.person      :as person]
             [usi4biz.utils.templates    :refer :all]
             [usi4biz.datasource         :refer [format-date-db format-timestamp-db]]
@@ -19,7 +20,8 @@
 
 (defn issue [id]
       (selmer/render-file (path-to "issue.html")
-        {:issue (issue/find id)}))
+        {:issue (issue/find id)
+         :states (issue-state/find-by-issue id)}))
 
 (defn save-issue [issue]
     (if (b/valid? issue issue/validation-rules)

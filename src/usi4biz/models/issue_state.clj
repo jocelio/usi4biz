@@ -41,7 +41,7 @@
 
 (defn find-by-issue [issue-id]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
-    (let [rows (jdbc/query conn ["select * from issue_state where issue = ?" issue-id])]
+    (let [rows (jdbc/query conn ["select * from issue_state where issue = ? order by set_date desc" issue-id])]
       rows)))
 
 (defn find-total-state-per-month [state]
