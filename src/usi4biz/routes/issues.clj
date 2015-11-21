@@ -23,23 +23,25 @@
         {:issue (issue/find id)
          :issue-states (issue-state/find-by-issue id)}))
 
-(defn save-issue [issue]
+(defn save-issue [params]
     (if (b/valid? issue issue/validation-rules)
-      (selmer/render-file (path-to "issues.html")
-        {:issue  (issue/save issue)
-         :milestones (milestone/find-by-product (:product issue))
-         :products (product/find-all)
-         :assignees (person/find-all)
-         :selected-product (:product issue)
-         :selected-milestone (:milestone issue)
-         :selected-assignee (:assignee issue)})
-      (selmer/render-file (path-to "issue_form.html")
-        {:issue issue
-         :products (product/find-all)
-         :milestones (milestone/find-by-product (:product issue))
-         :assignees (person/find-all)
-         :assigning-types issue/assigning-types
-         :priority-types issue/priority-types})))
+      (let [issue (dissoc params :state :set_date :set_date_time)
+            issue-state (select-keys params [:state :set_date :set_date_time])]
+        (selmer/render-file (path-to "issues.html")
+          {:issue  (issue/save issue issue-state)
+           :milestones (milestone/find-by-product (:product issue))
+           :products (product/find-all)
+           :assignees (person/find-all)
+           :selected-product (:product issue)
+           :selected-milestone (:milestone issue)
+           :selected-assignee (:assignee issue)})
+        (selmer/render-file (path-to "issue_form.html")
+          {:issue issue
+           :products (product/find-all)
+           :milestones (milestone/find-by-product (:product issue))
+           :assignees (person/find-all)
+           :assigning-types issue/assigning-types
+           :priority-types issue/priority-types}))))
 
 (defn issue-form
   ([]   (issue-form nil))

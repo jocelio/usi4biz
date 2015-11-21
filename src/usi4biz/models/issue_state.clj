@@ -88,7 +88,11 @@
                (conj totals-with-accumulated (assoc (first totals)
                                                     :accumulated accumulated)))))))
 
-(defn create [a-issue-state]
-  (let [issue-state (assoc a-issue-state :id (ds/unique-id))]
-    (jdbc/insert! ds/db-spec :issue_state issue-state)
-    issue-state))
+(defn save [an-issue-state]
+ (if (empty? (:id an-issue-state))
+   (let [issue-state (assoc an-issue-state :id (ds/unique-id))]
+     (jdbc/insert! ds/db-spec :issue_state issue-state)
+     issue-state)
+   (let [issue-state an-issue-state]
+     (jdbc/update! ds/db-spec :issue_state issue-state ["id = ?" (:id issue-state)])
+     issue-state)))
