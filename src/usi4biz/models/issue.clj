@@ -75,19 +75,15 @@
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
     (jdbc/query conn ["select * from issue where reference = ?" reference])))
 
-(defn create [a-issue]
-  (let [issue (assoc a-issue :id (ds/unique-id))]
-    (jdbc/insert! ds/db-spec :issue issue)
-    issue))
-
-(defn save [a-issue]
- (if (empty? (:id a-issue))
-   (let [issue (assoc a-issue :id (ds/unique-id))]
-     (jdbc/insert! ds/db-spec :issue issue)
-     issue)
-   (let [issue a-issue]
-     (jdbc/update! ds/db-spec :issue issue ["id = ?" (:id issue)])
-     issue)))
+(defn save [an-issue an-issue-state]
+ (let issue [(if (empty? (:id an-issue))
+               (let [i (assoc an-issue :id (ds/unique-id))]
+                 (jdbc/insert! ds/db-spec :issue i)
+                 i)
+               (let [i an-issue]
+                 (jdbc/update! ds/db-spec :issue i ["id = ?" (:id i)])
+                 i))]
+   (iss/save (assoc an-issue-state :issue (:id issue)))))
 
 (defn delete [id]
  (jdbc/delete! ds/db-spec :issue ["id = ?" id]) id)
