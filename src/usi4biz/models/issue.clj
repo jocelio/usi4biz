@@ -76,7 +76,7 @@
     (jdbc/query conn ["select * from issue where reference = ?" reference])))
 
 (defn save [an-issue an-issue-state]
- (let issue [(if (empty? (:id an-issue))
+ (let [issue (if (empty? (:id an-issue))
                (let [i (assoc an-issue :id (ds/unique-id))]
                  (jdbc/insert! ds/db-spec :issue i)
                  i)
