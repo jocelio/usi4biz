@@ -29,7 +29,7 @@
         {:products (product/find-all)}))
   ([id]
       (selmer/render-file (path-to "product.html")
-        {:product (product/find id)})))
+        {:product (product/find-it id)})))
 
 (defn save-product [id acronym name description]
   (let [product {:id id :acronym acronym :name name :description description}]
@@ -43,7 +43,7 @@
 
 (defn product-form
   ([]   (selmer/render-file (path-to "product_form.html") {}))
-  ([id] (selmer/render-file (path-to "product_form.html") {:product (product/find id)})))
+  ([id] (selmer/render-file (path-to "product_form.html") {:product (product/find-it id)})))
 
 (defn tabular-values []
   (map #(conj (val %) (key %))
@@ -56,7 +56,7 @@
                    (rest totals))))))
 
 (defn presentation [product-id]
-  (let [a-product           (first (product/find product-id))
+  (let [a-product           (first (product/find-it product-id))
         upcomming-milestone (first (milestone/upcomming-milestone))]
     (selmer/render-file (path-to "presentation.html")
       {:product                 (:acronym a-product)

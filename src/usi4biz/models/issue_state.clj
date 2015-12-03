@@ -39,13 +39,20 @@
         (jdbc/query conn ["select * from issue_state where issue = ? and state = ? order by set_date desc" issue-id state])))))
 
 (defn save [an-issue-state]
- (if (empty? (:id an-issue-state))
-   (let [issue-state (assoc an-issue-state :id (ds/unique-id))]
-     (jdbc/insert! ds/db-spec :issue_state issue-state)
-     issue-state)
-   (let [issue-state an-issue-state]
-     (jdbc/update! ds/db-spec :issue_state issue-state ["id = ?" (:id issue-state)])
-     issue-state)))
+  ; Try to find an existing state to modify it.
+  (let [issue-state (find-by-issue (:issue an-issue-state)
+                                   (:state an-issue-state))]
+    (if (empty? issue-state)
+      ; If the informed state doesn't exist, then it creates one.
+      (let [issue-state (assoc an-issue-state :id (ds/unique-id))]
+        (jdbc/insert! ds/db-spec :issue_state issue-state)
+        issue-state)
+      ; Otherwise the existing state is updated.
+      (let [issue-state an-issue-state]
+        (jdbc/update! ds/db-spec :issue_state issue-state ["state = ? and issue = ?"
+                                                           (:state (:state issue-state))
+                                                           (:issue (:issue issue-state))])
+        issue-state))))
 
 (defn backlog-size []
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]

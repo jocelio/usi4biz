@@ -18,7 +18,7 @@
   usi4biz.models.issue
   (:require [hikari-cp.core             :refer :all]
             [clojure.java.jdbc          :as jdbc]
-            [clojure.string             :refer :all]
+            [clojure.string             :refer [blank? upper-case]]
             [usi4biz.datasource         :as ds]
             [usi4biz.models.issue-state :as iss]
             [bouncer.validators         :as v]))
@@ -40,7 +40,7 @@
                        :name      v/required
                        :reference v/required})
 
-(defn find [id]
+(defn find-it [id]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
     (first (jdbc/query conn ["select i.id, i.name, i.product, p.name as product_name,
                                      i.milestone, m.name as milestone_name, i.assignee,
@@ -76,14 +76,14 @@
     (jdbc/query conn ["select * from issue where reference = ?" reference])))
 
 (defn save [an-issue an-issue-state]
- (let [issue (if (empty? (:id an-issue))
-               (let [i (assoc an-issue :id (ds/unique-id))]
-                 (jdbc/insert! ds/db-spec :issue i)
-                 i)
-               (let [i an-issue]
-                 (jdbc/update! ds/db-spec :issue i ["id = ?" (:id i)])
-                 i))]
-   (iss/save (assoc an-issue-state :issue (:id issue)))))
+  (let [issue (if (empty? (:id an-issue))
+                (let [i (assoc an-issue :id (ds/unique-id))]
+                  (jdbc/insert! ds/db-spec :issue i)
+                  i)
+                (let [i an-issue]
+                  (jdbc/update! ds/db-spec :issue i ["id = ?" (:id i)])
+                  i))]
+     (iss/save (assoc an-issue-state :issue (:id issue)))))
 
 (defn delete [id]
- (jdbc/delete! ds/db-spec :issue ["id = ?" id]) id)
+  (jdbc/delete! ds/db-spec :issue ["id = ?" id]) id)

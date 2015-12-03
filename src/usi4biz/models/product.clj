@@ -26,7 +26,7 @@
 
 (def validation-rules {:name v/required})
 
-(defn find [id]
+(defn find-it [id]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
     (first (jdbc/query conn ["select * from product where id = ?" id]))))
 

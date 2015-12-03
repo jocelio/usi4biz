@@ -20,7 +20,7 @@
 
 (defn issue [id]
       (selmer/render-file (path-to "issue.html")
-        {:issue (issue/find id)
+        {:issue (issue/find-it id)
          :issue-states (issue-state/find-by-issue id)}))
 
 (defn save-issue [params]
@@ -28,7 +28,14 @@
       (let [issue (dissoc params :state :set_date :set_date_time)
             issue-state (select-keys params [:state :set_date :set_date_time])]
         (selmer/render-file (path-to "issues.html")
-          {:issue  (issue/save issue issue-state)
+          {:issue  (issue/save issue
+                               (dissoc (assoc issue-state
+                                              :set_date
+                                              (format-timestamp-db (str (:set_date issue-state)
+                                                                        " "
+                                                                        (:set_date_time issue-state))
+                                                                   "dd/MM/yyyy HH:mm"))
+                                       :set_date_time))
            :milestones (milestone/find-by-product (:product issue))
            :products (product/find-all)
            :assignees (person/find-all)
@@ -46,7 +53,7 @@
 (defn issue-form
   ([]   (issue-form nil))
   ([id] (selmer/render-file (path-to "issue_form.html")
-          (let [issue (issue/find id)
+          (let [issue (issue/find-it id)
                 response {:products (product/find-all)
                           :milestones (milestone/find-by-product (:product issue))
                           :assignees (person/find-all)
