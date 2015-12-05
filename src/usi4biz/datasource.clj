@@ -65,7 +65,8 @@
 
 (defn database-dump []
   (let [db-conf (db-config)]
-    (sh "mysqldump" (str "--user=" (:username db-conf))
+    (sh "mysqldump" (str "--host=" (:server-name db-conf))
+                    (str "--user=" (:username db-conf))
                     (str "--password=" (:password db-conf))
                     (str "--result-file=data/backup_usi4biz.sql")
                     (:database-name db-conf))))
