@@ -28,8 +28,6 @@
              :CLOSED   "CLOSED"     ; when the work on an issue is recognized as finished
              :CANCELED "CANCELED"}) ; when an issue can not be done for any reason
 
-(defrecord issue-state [id issue state set_date])
-
 (defn find-by-issue
   ([issue-id] (find-by-issue issue-id nil))
   ([issue-id state]

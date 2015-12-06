@@ -22,8 +22,6 @@
             [usi4biz.datasource :as ds]
             [bouncer.validators :as v]))
 
-(defrecord product [id name description acronym])
-
 (def validation-rules {:name v/required})
 
 (defn find-it [id]

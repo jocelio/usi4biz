@@ -21,8 +21,6 @@
             [usi4biz.datasource :as ds]
             [bouncer.validators :as v]))
 
-(defrecord user-account [id username])
-
 (def validation-rules {:username v/required})
 
 (defn find-all []
@@ -33,11 +31,6 @@
 (defn find-it [id]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
     (first (jdbc/query conn ["select * from user_account where id = ?" id]))))
-
-(defn find-by-name [name]
-  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
-    (let [rows (jdbc/query conn ["select * from user_account where name = ?" name])]
-      rows)))
 
 (defn save [a-user-account]
   (if (empty? (:id a-user-account))

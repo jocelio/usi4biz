@@ -20,13 +20,23 @@
             [clojure.java.jdbc  :as jdbc]
             [usi4biz.datasource :as ds]))
 
-(defrecord person [id first_name last_name email user_account])
-
 (defn find-all []
  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
    (jdbc/query conn ["select * from person order by first_name asc"])))
 
-(defn find-person [id]
+(defn find-it [id]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
     (let [rows (jdbc/query conn ["select * from person where id = ?" id])]
       rows)))
+
+(defn save [a-person]
+  (if (empty? (:id a-person))
+    (let [person (assoc a-person :id (ds/unique-id))]
+      (jdbc/insert! ds/db-spec :person person)
+      person)
+    (let [person a-person]
+      (jdbc/update! ds/db-spec :person person ["id = ?" (:id person)])
+      person)))
+
+(defn delete [id]
+  (jdbc/delete! ds/db-spec :person ["id = ?" id]) id)
