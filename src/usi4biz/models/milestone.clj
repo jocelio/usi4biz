@@ -30,7 +30,7 @@
                        :name    v/required
                        :type    v/required})
 
-(defn find [id]
+(defn find-it [id]
  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
    (first (jdbc/query conn ["select m.id, m.product, p.name as product_name, m.name, m.description, m.due_date, m.start_sprint, m.type
                              from milestone m join product p on m.product = p.id

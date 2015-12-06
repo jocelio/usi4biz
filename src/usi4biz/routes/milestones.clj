@@ -34,7 +34,7 @@
 
 (defn milestone [id]
       (selmer/render-file (path-to "milestone.html")
-        {:milestone (milestone/find id)}))
+        {:milestone (milestone/find-it id)}))
 
 (defn save-milestone [id product name description, start_sprint, start_sprint_time, due_date, type]
   (let [milestone {:id id
@@ -60,7 +60,7 @@
   :available-media-types ["application/json"]
   :handle-ok (fn [_]
                (let [milestones (milestone/find-by-product product-id)]
-                  (json/write-str milestones))));(reduce #(assoc %1 (:id %2) (:name %2)) {} milestones)))))
+                  (json/write-str milestones))))
 
 (defn milestone-form
   ([]   (milestone-form nil))
@@ -69,7 +69,7 @@
                           :types milestone/types}]
             (if (nil? id)
               response
-              (assoc response :milestone (milestone/find id)))))))
+              (assoc response :milestone (milestone/find-it id)))))))
 
 (defroutes routes
   (context "/milestones" []

@@ -22,27 +22,48 @@
             [usi4biz.models.milestone :as milestone]
             [usi4biz.utils.calendar   :as calendar]))
 
-(def states {:CREATED  "CREATED"  ; when an issue is created
-             :ASSIGNED "ASSIGNED" ; when an issue has an assignee and a milestone
-             :FINISHED "FINISHED" ; when the work on an issue is finished
-             :CLOSED   "CLOSED"   ; when the work on an issue is recognized as finished
-             :CANCELED "CANCELED" ; when an issue can not be done for any reason
-             })
+(def states {:CREATED  "CREATED"    ; when an issue is created
+             :ASSIGNED "ASSIGNED"   ; when an issue has an assignee and a milestone
+             :FINISHED "FINISHED"   ; when the work on an issue is finished
+             :CLOSED   "CLOSED"     ; when the work on an issue is recognized as finished
+             :CANCELED "CANCELED"}) ; when an issue can not be done for any reason
 
 (defrecord issue-state [id issue state set_date])
 
-(defn backlog-size []
- (jdbc/with-db-connection [conn {:datasource ds/datasource}]
-   (jdbc/query conn ["select count(id) size
-                      from issue
-                      where id not in (select issue
-                                       from issue_state
-                                       where state in ('FINISHED','CLOSED','CANCELED'))"])))
+(defn find-by-issue
+  ([issue-id] (find-by-issue issue-id nil))
+  ([issue-id state]
+    (jdbc/with-db-connection [conn {:datasource ds/datasource}]
+      (if (nil? state)
+        (jdbc/query conn ["select * from issue_state where issue = ? order by set_date desc" issue-id])
+        (jdbc/query conn ["select * from issue_state where issue = ? and state = ? order by set_date desc" issue-id state])))))
 
-(defn find-by-issue [issue-id]
+(defn save [an-issue-state]
+  ; Try to find an existing state to modify it.
+  (let [issue-state (find-by-issue (:issue an-issue-state)
+                                   (:state an-issue-state))]
+    (if (empty? issue-state)
+      ; If the informed state doesn't exist, then it creates one.
+      (let [issue-state (assoc an-issue-state :id (ds/unique-id))]
+        (jdbc/insert! ds/db-spec :issue_state issue-state)
+        issue-state)
+      ; Otherwise the existing state is updated.
+      (let [iss (assoc (first issue-state) :set_date (:set_date an-issue-state))]
+        (jdbc/update! ds/db-spec :issue_state iss ["id = ?" (:id iss)])
+        iss))))
+
+(defn delete [id]
+  (jdbc/delete! ds/db-spec :issue_state ["id = ?" id]) id)
+
+;==========================================================================
+
+(defn backlog-size []
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
-    (let [rows (jdbc/query conn ["select * from issue_state where issue = ?" issue-id])]
-      rows)))
+    (jdbc/query conn ["select count(id) size
+                       from issue
+                       where id not in (select issue
+                                        from issue_state
+                                        where state in ('FINISHED','CLOSED','CANCELED'))"])))
 
 (defn find-total-state-per-month [state]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
@@ -88,8 +109,3 @@
                                   (:total (second totals))))
                (conj totals-with-accumulated (assoc (first totals)
                                                     :accumulated accumulated)))))))
-
-(defn create [a-issue-state]
-  (let [issue-state (assoc a-issue-state :id (ds/unique-id))]
-    (jdbc/insert! ds/db-spec :issue_state issue-state)
-    issue-state))
