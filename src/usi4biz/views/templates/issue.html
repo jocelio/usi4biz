@@ -56,12 +56,14 @@
       <thead>
         <th>Status</th>
         <th>Date</th>
+        <th> </th>
       </thead>
       <tbody>
         {% for state in issue-states %}
           <tr>
             <td>{{ state.state|title }}</td>
             <td>{{ state.set_date|date:"dd/MM/yyyy HH:mm" }}</td>
+            <td><a id="issues-{{ issue.id }}-states-{{ state.id }}" href="#" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
           </tr>
         {% endfor %}
       </tbody>

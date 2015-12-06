@@ -1,4 +1,21 @@
-(ns usi4biz.routes.issues
+; Usi4Biz: User Interaction For Business
+; Copyright (C) 2015 Hildeberto Mendonça
+;
+; This program is free software: you can redistribute it and/or modify
+; it under the terms of the GNU General Public License as published by
+; the Free Software Foundation, either version 3 of the License, or
+; (at your option) any later version.
+;
+; This program is distributed in the hope that it will be useful,
+; but WITHOUT ANY WARRANTY; without even the implied warranty of
+; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+; GNU General Public License for more details.
+;
+; You should have received a copy of the GNU General Public License
+; along with this program. If not, see http://www.gnu.org/licenses/.
+
+(ns ^{:author "Hildeberto Mendonça - hildeberto.com"}
+  usi4biz.routes.issues
   (:require [compojure.core             :refer [defroutes context DELETE GET POST]]
             [selmer.parser              :as selmer]
             [usi4biz.models.product     :as product]
@@ -23,32 +40,35 @@
         {:issue (issue/find-it id)
          :issue-states (issue-state/find-by-issue id)}))
 
+(defn remove-issue-state [issue-id issue-state-id]
+  (issue-state/delete issue-state-id)
+  issue-id)
+
 (defn save-issue [params]
+  (let [issue       (dissoc params :state :set_date :set_date_time)
+        issue-state (select-keys params [:state :set_date :set_date_time])]
     (if (b/valid? issue issue/validation-rules)
-      (let [issue (dissoc params :state :set_date :set_date_time)
-            issue-state (select-keys params [:state :set_date :set_date_time])]
-        (selmer/render-file (path-to "issues.html")
-          {:issue  (issue/save issue
-                               (dissoc (assoc issue-state
-                                              :set_date
-                                              (format-timestamp-db (str (:set_date issue-state)
-                                                                        " "
-                                                                        (:set_date_time issue-state))
-                                                                   "dd/MM/yyyy HH:mm"))
-                                       :set_date_time))
-           :milestones (milestone/find-by-product (:product issue))
-           :products (product/find-all)
-           :assignees (person/find-all)
-           :selected-product (:product issue)
-           :selected-milestone (:milestone issue)
-           :selected-assignee (:assignee issue)})
-        (selmer/render-file (path-to "issue_form.html")
-          {:issue issue
-           :products (product/find-all)
-           :milestones (milestone/find-by-product (:product issue))
-           :assignees (person/find-all)
-           :assigning-types issue/assigning-types
-           :priority-types issue/priority-types}))))
+      (selmer/render-file (path-to "issues.html")
+        {:issue  (issue/save issue
+                             (dissoc (assoc issue-state
+                                            :set_date
+                                            (format-timestamp-db (str (:set_date issue-state) " "
+                                                                      (:set_date_time issue-state))
+                                                                 "dd/MM/yyyy HH:mm"))
+                                     :set_date_time))
+         :milestones (milestone/find-by-product (:product issue))
+         :products (product/find-all)
+         :assignees (person/find-all)
+         :selected-product (:product issue)
+         :selected-milestone (:milestone issue)
+         :selected-assignee (:assignee issue)})
+      (selmer/render-file (path-to "issue_form.html")
+        {:issue issue
+         :products (product/find-all)
+         :milestones (milestone/find-by-product (:product issue))
+         :assignees (person/find-all)
+         :assigning-types issue/assigning-types
+         :priority-types issue/priority-types}))))
 
 (defn issue-form
   ([]   (issue-form nil))
@@ -67,14 +87,17 @@
 
 (defroutes routes
   (context "/issues" []
-    (GET  "/" {params :params}
-          (issues params))
-    (GET  "/:id{[A-Z_0-9]{32}}" [id]
-          (issue id))
-    (GET  "/form" []
-          (issue-form))
-    (GET  "/:id{[A-Z_0-9]{32}}/form" [id]
-          (issue-form id))
-    (POST "/" {params :params}
-          (save-issue params))
-    (DELETE "/:id{[A-Z_0-9]{32}}" [id] (issue/delete id))))
+    (GET    "/" {params :params}
+            (issues params))
+    (GET    "/:id{[A-Z_0-9]{32}}" [id]
+            (issue id))
+    (GET    "/form" []
+            (issue-form))
+    (GET    "/:id{[A-Z_0-9]{32}}/form" [id]
+            (issue-form id))
+    (POST   "/" {params :params}
+            (save-issue params))
+    (DELETE "/:id{[A-Z_0-9]{32}}" [id]
+            (issue/delete id))
+    (DELETE "/:id{[A-Z_0-9]{32}}/states/:state{[A-Z_0-9]{32}}" [id state]
+            (remove-issue-state id state))))

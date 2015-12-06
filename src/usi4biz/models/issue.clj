@@ -83,7 +83,8 @@
                 (let [i an-issue]
                   (jdbc/update! ds/db-spec :issue i ["id = ?" (:id i)])
                   i))]
-     (iss/save (assoc an-issue-state :issue (:id issue)))))
+     (iss/save (assoc an-issue-state :issue (:id issue)))
+     issue))
 
 (defn delete [id]
   (jdbc/delete! ds/db-spec :issue ["id = ?" id]) id)

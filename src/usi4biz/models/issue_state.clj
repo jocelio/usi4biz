@@ -48,11 +48,14 @@
         (jdbc/insert! ds/db-spec :issue_state issue-state)
         issue-state)
       ; Otherwise the existing state is updated.
-      (let [issue-state an-issue-state]
-        (jdbc/update! ds/db-spec :issue_state issue-state ["state = ? and issue = ?"
-                                                           (:state (:state issue-state))
-                                                           (:issue (:issue issue-state))])
-        issue-state))))
+      (let [iss (assoc (first issue-state) :set_date (:set_date an-issue-state))]
+        (jdbc/update! ds/db-spec :issue_state iss ["id = ?" (:id iss)])
+        iss))))
+
+(defn delete [id]
+  (jdbc/delete! ds/db-spec :issue_state ["id = ?" id]) id)
+
+;==========================================================================
 
 (defn backlog-size []
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
