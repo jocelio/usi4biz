@@ -1,0 +1,22 @@
+{% extends "usi4biz/views/templates/layout.html" %}
+{% block content %}
+<h2>User Account</h2>
+<form action="/user_accounts" method="POST">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" class="form-control" value="{{ user-account.username }}"></input>
+          </div>
+        </div>
+      </div>
+      <input type="hidden" name="id" value="{{ user-account.id }}">
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save</button>
+    </div>
+  </div>
+</form>
+{% endblock %}

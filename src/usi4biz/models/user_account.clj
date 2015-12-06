@@ -18,7 +18,8 @@
   usi4biz.models.user-account
   (:require [hikari-cp.core     :refer :all]
             [clojure.java.jdbc  :as jdbc]
-            [usi4biz.datasource :as ds]))
+            [usi4biz.datasource :as ds]
+            [bouncer.validators :as v]))
 
 (defrecord user-account [id username])
 
@@ -28,6 +29,10 @@
  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
    (let [rows (jdbc/query conn ["select * from user_account"])]
      rows)))
+
+(defn find-it [id]
+  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
+    (first (jdbc/query conn ["select * from user_account where id = ?" id]))))
 
 (defn find-by-name [name]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
