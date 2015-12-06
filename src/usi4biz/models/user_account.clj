@@ -22,7 +22,9 @@
 
 (defrecord user-account [id username])
 
-(defn find-all-accounts []
+(def validation-rules {:username v/required})
+
+(defn find-all []
  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
    (let [rows (jdbc/query conn ["select * from user_account"])]
      rows)))
@@ -32,5 +34,14 @@
     (let [rows (jdbc/query conn ["select * from user_account where name = ?" name])]
       rows)))
 
-(defn create [user-account]
-  (jdbc/insert! ds/db-spec :user_account (assoc user-account :id (ds/unique-id))))
+(defn save [a-user-account]
+  (if (empty? (:id a-user-account))
+    (let [user-account (assoc a-user-account :id (ds/unique-id))]
+      (jdbc/insert! ds/db-spec :user_account user-account)
+      user-account)
+    (let [user-account a-user-account]
+      (jdbc/update! ds/db-spec :user_account user-account ["id = ?" (:id user-account)])
+      user-account)))
+
+(defn delete [id]
+  (jdbc/delete! ds/db-spec :user_account ["id = ?" id]) id)
