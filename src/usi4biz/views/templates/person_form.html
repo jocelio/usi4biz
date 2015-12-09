@@ -1,0 +1,34 @@
+{% extends "usi4biz/views/templates/layout.html" %}
+{% block content %}
+<h2>Person</h2>
+<form action="/persons" method="POST">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="first_name">First Name</label>
+            <input type="text" name="first_name" id="first_name" class="form-control" value="{{ person.first_name }}"></input>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="first_name">Last Name</label>
+            <input type="text" name="last_name" id="last_name" class="form-control" value="{{ person.last_name }}"></input>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="first_name">Email</label>
+            <input type="text" name="email" id="email" class="form-control" value="{{ person.email }}"></input>
+          </div>
+        </div>
+      </div>
+      <input type="hidden" name="id" value="{{ person.id }}">
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save</button>
+    </div>
+  </div>
+</form>
+{% endblock %}
