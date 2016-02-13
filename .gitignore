@@ -4,4 +4,4 @@ data/
 log/
 target/
 resources/db-config.edn
-
+resources/app-config.edn
