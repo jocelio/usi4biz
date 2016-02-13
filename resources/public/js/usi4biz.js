@@ -25,6 +25,7 @@ $("#remove").click(function(event) {
       success: function(msg) {
         url = window.location.href.toString();
         url = url.replace("/" + msg, "");
+        console.log(url);
         window.location.replace(url);
       }
     });

@@ -1,0 +1,39 @@
+{% extends "usi4biz/views/templates/layout.html" %}
+{% block content %}
+<h2>{{ log.file-name }}</h2>
+<div class="panel panel-default">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="form-group">
+          <b>Path</b>
+          <p>{{ log.path }}</p>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="form-group">
+          <b>Last Modified</b>
+          <p>{{ log.last-modified|date:shortDateTime }}</p>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="form-group">
+          <b>Length</b>
+          <p>{{ log.length|double-format:1 }} kB</p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <b>Content</b>
+          <p><textarea class="form-control" rows="30">{{ log.content }}</textarea></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel-footer">
+    <a href="#" class="btn btn-danger" id="remove"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove</a>
+  </div>
+</div>
+{% endblock %}
