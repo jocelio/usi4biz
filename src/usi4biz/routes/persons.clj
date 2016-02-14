@@ -1,0 +1,57 @@
+; Usi4Biz: User Interaction For Business
+; Copyright (C) 2015 Hildeberto Mendonça
+;
+; This program is free software: you can redistribute it and/or modify
+; it under the terms of the GNU General Public License as published by
+; the Free Software Foundation, either version 3 of the License, or
+; (at your option) any later version.
+;
+; This program is distributed in the hope that it will be useful,
+; but WITHOUT ANY WARRANTY; without even the implied warranty of
+; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+; GNU General Public License for more details.
+;
+; You should have received a copy of the GNU General Public License
+; along with this program. If not, see http://www.gnu.org/licenses/.
+
+(ns ^{:author "Hildeberto Mendonça - hildeberto.com"}
+  usi4biz.routes.persons
+  (:require [compojure.core          :refer [defroutes context DELETE GET POST]]
+            [selmer.parser           :as selmer]
+            [usi4biz.models.person   :as person]
+            [usi4biz.utils.templates :refer :all]
+            [bouncer.core            :as b]))
+
+(defn persons
+  ([] (selmer/render-file (path-to "persons.html")
+        {:persons (person/find-all)}))
+  ([id]
+      (selmer/render-file (path-to "person.html")
+        {:person (person/find-it id)})))
+
+(defn save-person [params]
+  (let [person params]
+    (if (b/valid? person person/validation-rules)
+      (selmer/render-file (path-to "persons.html")
+        {:person (person/save person)
+         :persons (person/find-all)})
+      (selmer/render-file (path-to "person_form.html")
+        {:person person}))))
+
+(defn person-form
+  ([]   (selmer/render-file (path-to "person_form.html") {}))
+  ([id] (selmer/render-file (path-to "person_form.html") {:person (person/find-it id)})))
+
+(defroutes routes
+  (context "/persons" []
+    (GET  "/" []
+          (persons))
+    (GET  "/:id{[A-Z_0-9]{32}}" [id]
+          (persons id))
+    (GET  "/form" []
+          (person-form))
+    (GET  "/:id{[A-Z_0-9]{32}}/form" [id]
+          (person-form id))
+    (POST "/" {params :params}
+          (save-person params))
+    (DELETE "/:id{[A-Z_0-9]{32}}" [id] (person/delete id))))

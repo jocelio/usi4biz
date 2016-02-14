@@ -1,0 +1,22 @@
+{% extends "usi4biz/views/templates/layout.html" %}
+{% block content %}
+<h2>Logs</h2>
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Log file</th>
+      <th>Last Modified</th>
+      <th>Length</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for log in logs %}
+      <tr>
+        <td><a href="/logs/{{ log.file-name }}">{{ log.file-name }}</a></td>
+        <td>{{ log.last-modified|date:shortDateTime }}</td>
+        <td>{{ log.length|double-format:1 }} kB</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

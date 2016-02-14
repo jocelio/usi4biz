@@ -16,17 +16,19 @@
 
 (ns ^{:author "Hildeberto Mendonça - hildeberto.com"}
   usi4biz.handler
-  (:require [compojure.core              :refer :all]
-            [compojure.route             :as route]
-            [compojure.handler           :as handler]
-            [ring.middleware.defaults    :refer [wrap-defaults site-defaults]]
-            [usi4biz.datasource          :as ds]
-            [usi4biz.routes.chart        :as chart]
-            [usi4biz.routes.index        :as index]
-            [usi4biz.routes.products     :as products]
-            [usi4biz.routes.milestones   :as milestones]
-            [usi4biz.routes.issues       :as issues]
-            [usi4biz.routes.user-accounts :as user-accounts]))
+  (:require [compojure.core               :refer :all]
+            [compojure.route              :as route]
+            [compojure.handler            :as handler]
+            [ring.middleware.defaults     :refer [wrap-defaults site-defaults]]
+            [usi4biz.datasource           :as ds]
+            [usi4biz.routes.chart         :as chart]
+            [usi4biz.routes.index         :as index]
+            [usi4biz.routes.persons       :as persons]
+            [usi4biz.routes.products      :as products]
+            [usi4biz.routes.milestones    :as milestones]
+            [usi4biz.routes.issues        :as issues]
+            [usi4biz.routes.user-accounts :as user-accounts]
+            [usi4biz.routes.logs          :as logs]))
 
 (defn init []
   (println "Usi4Biz is starting...")
@@ -47,5 +49,7 @@
                         products/routes
                         milestones/routes
                         issues/routes
+                        persons/routes
                         user-accounts/routes
+                        logs/routes
                         app-routes)))

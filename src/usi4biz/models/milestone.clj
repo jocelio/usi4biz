@@ -21,8 +21,6 @@
             [usi4biz.datasource :as ds]
             [bouncer.validators :as v]))
 
-(defrecord milestone [id product name description due_date, start_sprint, type])
-
 (def types {:MAJOR        "MAJOR" ; planned milestone with fixed periodicity
             :INTERMEDIARY "INTERMEDIARY"}) ; unplanned milestone to apply a patch.
 

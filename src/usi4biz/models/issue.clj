@@ -34,15 +34,13 @@
                      :ESSENTIAL "ESSENTIAL"
                      :BLOCKING  "BLOCKING"})
 
-(defrecord issue [id product reference name description milestone assignee effort priority assigning_type])
-
 (def validation-rules {:product   v/required
                        :name      v/required
                        :reference v/required})
 
 (defn find-it [id]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
-    (first (jdbc/query conn ["select i.id, i.name, i.product, p.name as product_name,
+    (first (jdbc/query conn ["select i.id, i.name, i.description, i.product, p.name as product_name,
                                      i.milestone, m.name as milestone_name, i.assignee,
                                      a.first_name as assignee_name, i.priority,
                                      i.reference, assigning_type

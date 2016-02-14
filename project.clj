@@ -28,7 +28,7 @@
                  [ring/ring-defaults         "0.1.2" ] ; HTTP middleware
                  [liberator                  "0.13"  ] ; RESTful library
                  [http-kit                   "2.1.18"] ; High performance web server
-                 [selmer                     "0.9.4" ] ; Template engine
+                 [selmer                     "1.0.0" ] ; Template engine
 
                  ; Database
                  [org.clojure/java.jdbc      "0.3.6" ] ; Java JDBC bundle

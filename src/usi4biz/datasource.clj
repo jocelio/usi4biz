@@ -29,6 +29,7 @@
                    (clojure.java.io/reader "resources/db-config.edn"))]
     (edn/read in)))
 
+
 (def datasource
   (make-datasource (db-config)))
 
@@ -64,19 +65,20 @@
   (.replace (.toUpperCase (str (java.util.UUID/randomUUID))) "-" ""))
 
 (defn database-dump []
-  (let [db-conf (db-config)]
+  (let [db-conf (db-config)
+        str-date (calendar/to-string (java.util.Date.) "yyyy-MM-dd")]
     (sh "mysqldump" (str "--host=" (:server-name db-conf))
                     (str "--user=" (:username db-conf))
                     (str "--password=" (:password db-conf))
-                    (str "--result-file=data/backup_usi4biz.sql")
+                    (str "--result-file=data/backup-" str-date ".sql")
                     (:database-name db-conf))))
 
-(defn dump-import []
+(defn dump-import [str-date]
   (let [db-conf (db-config)]
     (sh "mysql" "-u" (:username db-conf)
                 "-p" (:password db-conf)
                 (:database-name db-conf)
-                "<" "backup_usi4biz.sql")))
+                "<" (str "data/backup-" str-date ".sql"))))
 
 (defn format-date-db [str-date format]
   (calendar/to-string (calendar/to-date str-date format) "yyyy-MM-dd"))
