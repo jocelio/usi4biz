@@ -18,16 +18,22 @@
   usi4biz.models.person
   (:require [hikari-cp.core     :refer :all]
             [clojure.java.jdbc  :as jdbc]
-            [usi4biz.datasource :as ds]))
+            [usi4biz.datasource :as ds]
+            [bouncer.validators :as v]))
+
+(def validation-rules {:first_name v/required
+                       :last_name  v/required
+                       :email      v/required})
 
 (defn find-all []
  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
-   (jdbc/query conn ["select * from person order by first_name asc"])))
+   (jdbc/query conn ["select   p.id, p.first_name, p.last_name, p.email, p.user_account, u.username
+                      from     person p left join user_account u on p.user_account = u.id
+                      order by first_name asc"])))
 
 (defn find-it [id]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
-    (let [rows (jdbc/query conn ["select * from person where id = ?" id])]
-      rows)))
+    (first (jdbc/query conn ["select * from person where id = ?" id]))))
 
 (defn save [a-person]
   (if (empty? (:id a-person))

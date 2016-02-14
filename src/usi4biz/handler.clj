@@ -23,6 +23,7 @@
             [usi4biz.datasource           :as ds]
             [usi4biz.routes.chart         :as chart]
             [usi4biz.routes.index         :as index]
+            [usi4biz.routes.persons       :as persons]
             [usi4biz.routes.products      :as products]
             [usi4biz.routes.milestones    :as milestones]
             [usi4biz.routes.issues        :as issues]
@@ -48,6 +49,7 @@
                         products/routes
                         milestones/routes
                         issues/routes
+                        persons/routes
                         user-accounts/routes
                         logs/routes
                         app-routes)))
