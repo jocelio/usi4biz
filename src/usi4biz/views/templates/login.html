@@ -1,0 +1,29 @@
+{% extends "usi4biz/views/templates/layout.html" %}
+{% block content %}
+<h2>Login</h2>
+<form action="/login" method="POST">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="user">GitHub Username</label>
+            <input type="text" name="username" id="user" class="form-control"></input>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" class="form-control"></input>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Login</button>
+    </div>
+  </div>
+</form>
+{% endblock %}

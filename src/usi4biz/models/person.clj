@@ -33,7 +33,9 @@
 
 (defn find-it [id]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
-    (first (jdbc/query conn ["select * from person where id = ?" id]))))
+    (first (jdbc/query conn ["select p.id, p.first_name, p.last_name, p.email, p.user_account, u.username
+                              from   person p left join user_account u on p.user_account = u.id
+                              where  p.id = ?" id]))))
 
 (defn save [a-person]
   (if (empty? (:id a-person))

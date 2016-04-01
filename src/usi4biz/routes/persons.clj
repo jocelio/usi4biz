@@ -20,14 +20,18 @@
             [selmer.parser           :as selmer]
             [usi4biz.models.person   :as person]
             [usi4biz.utils.templates :refer :all]
-            [bouncer.core            :as b]))
+            [bouncer.core            :as b]
+            [tentacles.issues        :as issues]))
 
-(defn persons
-  ([] (selmer/render-file (path-to "persons.html")
-        {:persons (person/find-all)}))
-  ([id]
-      (selmer/render-file (path-to "person.html")
-        {:person (person/find-it id)})))
+(defn persons []
+  (selmer/render-file (path-to "persons.html")
+                      {:persons (person/find-all)}))
+
+(defn a-person [id]
+  (let [person (person/find-it id)]
+    (selmer/render-file (path-to "person.html")
+                        {:person person
+                         :issues (issues/issues "uclouvain" "osis-louvain")})))
 
 (defn save-person [params]
   (let [person params]
@@ -47,7 +51,7 @@
     (GET  "/" []
           (persons))
     (GET  "/:id{[A-Z_0-9]{32}}" [id]
-          (persons id))
+          (a-person id))
     (GET  "/form" []
           (person-form))
     (GET  "/:id{[A-Z_0-9]{32}}/form" [id]

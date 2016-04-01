@@ -15,14 +15,25 @@
 ; along with this program. If not, see http://www.gnu.org/licenses/.
 
 (ns ^{:author "Hildeberto Mendonça - hildeberto.com"}
-  usi4biz.routes.index
-  (:require [compojure.core             :refer [defroutes GET]]
-            [selmer.parser              :as selmer]
-            [usi4biz.models.product     :as product]
-            [usi4biz.views.layout       :as layout]))
+  usi4biz.views.layout
+  (:require [noir.session       :as session]
+            [selmer.parser      :as parser]
+            [ring.util.response :refer [content-type response]]
+            [compojure.response :refer [Renderable]]))
 
-(defn index []
-  (layout/render "index.html" {}))
+(def template-folder "usi4biz/views/templates/")
 
-(defroutes routes
-  (GET "/" [] (index)))
+(defn utf-8-response [html]
+  (content-type (response html) "text/html; charset=utf-8"))
+
+(deftype RenderablePage [template params]
+  Renderable
+  (render [this request]
+    (->> (assoc params
+                :context (:context request)
+                :user (session/get :user))
+         (parser/render-file (str template-folder template))
+         utf-8-response)))
+
+(defn render [template & [params]]
+  (RenderablePage. template params))

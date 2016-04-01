@@ -22,14 +22,19 @@
             [usi4biz.models.issue-state :as issue-state]
             [usi4biz.models.milestone   :as milestone]
             [usi4biz.utils.templates    :refer :all]
-            [bouncer.core               :as b]))
+            [bouncer.core               :as b]
+            [tentacles.issues           :as issues]
+            [tentacles.users            :as users]))
 
-(defn products
-  ([] (selmer/render-file (path-to "products.html")
-        {:products (product/find-all)}))
-  ([id]
-      (selmer/render-file (path-to "product.html")
-        {:product (product/find-it id)})))
+(defn products []
+  (selmer/render-file (path-to "products.html")
+                      {:products (product/find-all)}))
+
+(defn a-product [id]
+  (let [product (product/find-it id)]
+    (selmer/render-file (path-to "product.html")
+                        {:product product
+                         :issues  (issues/issues (users/user "htmfilho") (:repository product))})))
 
 (defn save-product [product]
   (if (b/valid? product product/validation-rules)
@@ -74,7 +79,7 @@
     (GET  "/" []
           (products))
     (GET  "/:id{[A-Z_0-9]{32}}" [id]
-          (products id))
+          (a-product id))
     (GET  "/form" []
           (product-form))
     (GET  "/:id{[A-Z_0-9]{32}}/form" [id]

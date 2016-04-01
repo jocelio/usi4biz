@@ -1,16 +1,8 @@
 {% extends "usi4biz/views/templates/layout.html" %}
 {% block content %}
-<h2>Person</h2>
+<h2>{{ person.first_name }} {{ person.last_name }}</h2>
 <div class="panel panel-default">
   <div class="panel-body">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="form-group">
-          <b>Full Name</b>
-          <p>{{ person.first_name }} {{ person.last_name }}</p>
-        </div>
-      </div>
-    </div>
     <div class="row">
       <div class="col-md-12">
         <div class="form-group">
@@ -20,9 +12,38 @@
       </div>
     </div>
   </div>
+
   <div class="panel-footer">
     <a href="/persons/{{ person.id }}/form" class="btn btn-default"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>
     <a href="#" class="btn btn-danger" id="remove"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove</a>
   </div>
 </div>
+
+<div>
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#issues" aria-controls="issues" role="tab" data-toggle="tab">Issues</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="issues">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for issue in issues %}
+            <tr>
+              <td>{{ issue }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

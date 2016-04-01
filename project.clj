@@ -19,16 +19,16 @@
   :url "http://usi4biz.com"
 
   :dependencies [; Core
-                 [org.clojure/clojure        "1.7.0" ] ; Core libraries
+                 [org.clojure/clojure        "1.6.0" ] ; Core libraries
                  [org.clojure/data.json      "0.2.6" ] ; Json library
 
                  ; Web
-                 [compojure                  "1.4.0" ] ; Routing library
-                 [ring-server                "0.4.0" ] ; Default web server
-                 [ring/ring-defaults         "0.1.2" ] ; HTTP middleware
+                 [compojure                  "1.1.5" ] ; Routing library
+                 [ring-server                "0.3.1" ] ; Default web server
                  [liberator                  "0.13"  ] ; RESTful library
                  [http-kit                   "2.1.18"] ; High performance web server
-                 [selmer                     "1.0.0" ] ; Template engine
+                 [selmer                     "0.6.5" ] ; Template engine
+                 [lib-noir                   "0.8.2" ] ; Utilities and helpers for ring apps
 
                  ; Database
                  [org.clojure/java.jdbc      "0.3.6" ] ; Java JDBC bundle
@@ -40,6 +40,7 @@
                  ; Utils
                  [bouncer                    "0.3.3" ] ; Validation library
                  [org.slf4j/slf4j-log4j12    "1.7.1" ] ; Logging library
+                 [tentacles                  "0.5.1" ] ; work with the Github v3 API
                  [log4j/log4j                "1.2.17"  ; Logging library
                   :exclusions [javax.mail/mail
                                javax.jms/jms
