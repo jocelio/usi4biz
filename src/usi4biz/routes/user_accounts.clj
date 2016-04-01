@@ -19,15 +19,21 @@
   (:require [compojure.core              :refer [defroutes context DELETE GET POST]]
             [selmer.parser               :as selmer]
             [usi4biz.models.user-account :as user-account]
-            [usi4biz.utils.templates    :refer :all]
-            [bouncer.core               :as b]))
+            [usi4biz.utils.templates     :refer :all]
+            [bouncer.core                :as b]
+            [tentacles.repos             :as repos]
+            [tentacles.users             :as users]))
 
-(defn user-accounts
-  ([] (selmer/render-file (path-to "user_accounts.html")
-        {:user-accounts (user-account/find-all)}))
-  ([id]
-      (selmer/render-file (path-to "user_account.html")
-        {:user-account (user-account/find-it id)})))
+(defn user-accounts []
+  (selmer/render-file (path-to "user_accounts.html")
+                      {:user-accounts (user-account/find-all)}))
+
+(defn a-user-account [id]
+  (let [user  (user-account/find-it id)]
+    (selmer/render-file (path-to "user_account.html")
+                        {:user-account user
+                         :user (users/user (:username user))
+                         :repos (repos/user-repos (:username user))})))
 
 (defn save-user-account [params]
   (let [user-account params]
@@ -48,7 +54,7 @@
     (GET  "/" []
           (user-accounts))
     (GET  "/:id{[A-Z_0-9]{32}}" [id]
-          (user-accounts id))
+          (a-user-account id))
     (GET  "/form" []
           (user-account-form))
     (GET  "/:id{[A-Z_0-9]{32}}/form" [id]

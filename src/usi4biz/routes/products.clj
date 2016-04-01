@@ -22,24 +22,28 @@
             [usi4biz.models.issue-state :as issue-state]
             [usi4biz.models.milestone   :as milestone]
             [usi4biz.utils.templates    :refer :all]
-            [bouncer.core               :as b]))
+            [bouncer.core               :as b]
+            [tentacles.issues           :as issues]
+            [tentacles.users            :as users]))
 
-(defn products
-  ([] (selmer/render-file (path-to "products.html")
-        {:products (product/find-all)}))
-  ([id]
-      (selmer/render-file (path-to "product.html")
-        {:product (product/find-it id)})))
+(defn products []
+  (selmer/render-file (path-to "products.html")
+                      {:products (product/find-all)}))
 
-(defn save-product [id acronym name description]
-  (let [product {:id id :acronym acronym :name name :description description}]
-    (if (b/valid? product product/validation-rules)
-      (selmer/render-file (path-to "products.html")
-        {:product (product/save product)
-         :products (product/find-all)})
-      (selmer/render-file (path-to "product_form.html")
-        {:product product
-         :error-name (first (:name (first (b/validate product product/validation-rules))))}))))
+(defn a-product [id]
+  (let [product (product/find-it id)]
+    (selmer/render-file (path-to "product.html")
+                        {:product product
+                         :issues  (issues/issues (users/user "htmfilho") (:repository product))})))
+
+(defn save-product [product]
+  (if (b/valid? product product/validation-rules)
+    (selmer/render-file (path-to "products.html")
+                        {:product (product/save product)
+                         :products (product/find-all)})
+    (selmer/render-file (path-to "product_form.html")
+                        {:product product
+                         :error-name (first (:name (first (b/validate product product/validation-rules))))})))
 
 (defn product-form
   ([]   (selmer/render-file (path-to "product_form.html") {}))
@@ -75,13 +79,13 @@
     (GET  "/" []
           (products))
     (GET  "/:id{[A-Z_0-9]{32}}" [id]
-          (products id))
+          (a-product id))
     (GET  "/form" []
           (product-form))
     (GET  "/:id{[A-Z_0-9]{32}}/form" [id]
           (product-form id))
     (GET  "/:id{[A-Z_0-9]{32}}/presentation" [id]
           (presentation id))
-    (POST "/" [id acronym name description]
-          (save-product id acronym name description))
+    (POST "/" {params :params}
+          (save-product params))
     (DELETE "/:id{[A-Z_0-9]{32}}" [id] (product/delete id))))

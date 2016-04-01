@@ -32,6 +32,10 @@
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
     (first (jdbc/query conn ["select * from user_account where id = ?" id]))))
 
+(defn find-by-username [username]
+  (jdbc/with-db-connection [conn {:datasource ds/datasource}]
+    (first (jdbc/query conn ["select * from user_account where username = ?" username]))))
+
 (defn save [a-user-account]
   (if (empty? (:id a-user-account))
     (let [user-account (assoc a-user-account :id (ds/unique-id))]

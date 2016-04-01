@@ -19,8 +19,9 @@
   (:require [compojure.core               :refer :all]
             [compojure.route              :as route]
             [compojure.handler            :as handler]
-            [ring.middleware.defaults     :refer [wrap-defaults site-defaults]]
+            [noir.util.middleware         :as noir-middleware]
             [usi4biz.datasource           :as ds]
+            [usi4biz.routes.auth          :as auth]
             [usi4biz.routes.chart         :as chart]
             [usi4biz.routes.index         :as index]
             [usi4biz.routes.persons       :as persons]
@@ -44,12 +45,13 @@
   (route/not-found "<h2>Not Found</h2>"))
 
 (def app
-  (handler/site (routes chart/routes
-                        index/routes
-                        products/routes
-                        milestones/routes
-                        issues/routes
-                        persons/routes
-                        user-accounts/routes
-                        logs/routes
-                        app-routes)))
+  (noir-middleware/app-handler [auth/routes
+                                chart/routes
+                                index/routes
+                                products/routes
+                                milestones/routes
+                                issues/routes
+                                persons/routes
+                                user-accounts/routes
+                                logs/routes
+                                app-routes]))

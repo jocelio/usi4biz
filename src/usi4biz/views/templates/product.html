@@ -10,16 +10,44 @@
           <p>{{ product.acronym }}</p>
         </div>
       </div>
-      <div class="col-md-9">
+      <div class="col-md-6">
         <div class="form-group">
           <b>Name</b>
           <p>{{ product.name }}</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <b>Repository</b>
+          <p>{{ product.repository }}</p>
         </div>
       </div>
     </div>
     <div class="form-group">
       <b>Description</b>
       <p>{{ product.description }}</p>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Issues</h3>
+      </div>
+      <div class="panel-body">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Issue</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for issue in issues %}
+              <tr>
+                <td>{{ issue }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
   <div class="panel-footer">
