@@ -19,7 +19,9 @@
   (:require [hikari-cp.core     :refer :all]
             [clojure.java.jdbc  :as jdbc]
             [usi4biz.datasource :as ds]
-            [bouncer.validators :as v]))
+            [bouncer.validators :as v]
+            [tentacles.users    :as users]
+            [noir.session       :as session]))
 
 (def validation-rules {:username v/required})
 
@@ -35,6 +37,9 @@
 (defn find-by-username [username]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
     (first (jdbc/query conn ["select * from user_account where username = ?" username]))))
+
+(defn find-profile []
+  (users/me {:auth (session/get :auth)}))
 
 (defn save [a-user-account]
   (if (empty? (:id a-user-account))

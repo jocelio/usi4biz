@@ -18,10 +18,12 @@
   usi4biz.models.issue
   (:require [hikari-cp.core             :refer :all]
             [clojure.java.jdbc          :as jdbc]
-            [clojure.string             :refer [blank? upper-case]]
+            [clojure.string             :refer [blank? upper-case split]]
             [usi4biz.datasource         :as ds]
             [usi4biz.models.issue-state :as iss]
-            [bouncer.validators         :as v]))
+            [bouncer.validators         :as v]
+            [tentacles.issues           :as issues]
+            [noir.session               :as session]))
 
 (def assigning-types {; as result of the sprint meeting
                       :PLANNED            "PLANNED"
@@ -48,6 +50,13 @@
                                            join milestone m on i.milestone = m.id
                                            join person a on i.assignee = a.id
                               where i.id = ?" id]))))
+
+(defn find-by-product [a-product]
+  (let [repository (split (:repository a-product) #"/")]
+    (filter #(not (contains? % :pull_request))
+            (issues/issues (first repository)
+                           (last repository)
+                           {:auth (session/get :auth)}))))
 
 (defn search [params]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]

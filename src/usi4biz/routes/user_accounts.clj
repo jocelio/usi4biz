@@ -17,37 +17,36 @@
 (ns ^{:author "Hildeberto Mendonça - hildeberto.com"}
   usi4biz.routes.user-accounts
   (:require [compojure.core              :refer [defroutes context DELETE GET POST]]
-            [selmer.parser               :as selmer]
             [usi4biz.models.user-account :as user-account]
-            [usi4biz.utils.templates     :refer :all]
+            [usi4biz.views.layout        :as layout]
             [bouncer.core                :as b]
             [tentacles.repos             :as repos]
             [tentacles.users             :as users]))
 
 (defn user-accounts []
-  (selmer/render-file (path-to "user_accounts.html")
-                      {:user-accounts (user-account/find-all)}))
+  (layout/render "user_accounts.html"
+                 {:user-accounts (user-account/find-all)}))
 
 (defn a-user-account [id]
-  (let [user  (user-account/find-it id)]
-    (selmer/render-file (path-to "user_account.html")
-                        {:user-account user
-                         :user (users/user (:username user))
-                         :repos (repos/user-repos (:username user))})))
+  (let [user (user-account/find-it id)]
+    (layout/render "user_account.html"
+                   {:user-account user
+                    :user (users/user (:username user))
+                    :repos (repos/user-repos (:username user))})))
 
 (defn save-user-account [params]
   (let [user-account params]
     (if (b/valid? user-account user-account/validation-rules)
-      (selmer/render-file (path-to "user_accounts.html")
-        {:user-account (user-account/save user-account)
-         :user-accounts (user-account/find-all)})
-      (selmer/render-file (path-to "user_account_form.html")
-        {:user-account user-account
-         :error-name (first (:username (first (b/validate user-account user-account/validation-rules))))}))))
+      (layout/render "user_accounts.html"
+                     {:user-account (user-account/save user-account)
+                      :user-accounts (user-account/find-all)})
+      (layout/render "user_account_form.html"
+                     {:user-account user-account
+                      :error-name (first (:username (first (b/validate user-account user-account/validation-rules))))}))))
 
 (defn user-account-form
-  ([]   (selmer/render-file (path-to "user_account_form.html") {}))
-  ([id] (selmer/render-file (path-to "user_account_form.html") {:user-account (user-account/find-it id)})))
+  ([]   (layout/render "user_account_form.html" {}))
+  ([id] (layout/render "user_account_form.html" {:user-account (user-account/find-it id)})))
 
 (defroutes routes
   (context "/user_accounts" []
@@ -61,4 +60,8 @@
           (user-account-form id))
     (POST "/" {params :params}
           (save-user-account params))
-    (DELETE "/:id{[A-Z_0-9]{32}}" [id] (user-account/delete id))))
+    (DELETE "/:id{[A-Z_0-9]{32}}" [id] (user-account/delete id)))
+
+  (context "/profile" []
+    (GET "/:id{[A-Z_0-9]{32}}" [id]
+         (a-user-account id))))

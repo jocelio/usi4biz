@@ -19,24 +19,23 @@
   (:require [compojure.core              :refer [defroutes GET POST]]
             [noir.session                :as session]
             [noir.response               :as response]
-            [selmer.parser               :as selmer]
+            [usi4biz.views.layout        :as layout]
             [tentacles.users             :as users]
-            [usi4biz.models.user-account :as user-account]
-            [usi4biz.utils.templates     :refer :all]))
+            [usi4biz.models.user-account :as user-account]))
 
 (defn login
-  ([] (selmer/render-file (path-to "login.html") {}))
+  ([] (layout/render "login.html" {}))
   ([username password]
-    (let [user (user-account/find-by-username username)
-          auth (str (:username user) ":" password)
-          github-user (users/me {:auth auth})]
-      (println github-user)
-      (if (:status github-user)
-        (response/redirect "/login")
-        (do
-          (session/put! :user user)
-          (session/put! :auth auth)
-          (response/redirect "/"))))))
+   (let [user (user-account/find-by-username username)
+         auth (str (:username user) ":" password)
+         github-user (users/me {:auth auth})]
+     (println github-user)
+     (if (:status github-user)
+       (response/redirect "/login")
+       (do
+         (session/put! :user user)
+         (session/put! :auth auth)
+         (response/redirect "/"))))))
 
 (defn logout []
   (session/clear!)

@@ -17,34 +17,33 @@
 (ns ^{:author "Hildeberto Mendonça - hildeberto.com"}
   usi4biz.routes.persons
   (:require [compojure.core          :refer [defroutes context DELETE GET POST]]
-            [selmer.parser           :as selmer]
             [usi4biz.models.person   :as person]
-            [usi4biz.utils.templates :refer :all]
+            [usi4biz.views.layout    :as layout]
             [bouncer.core            :as b]
             [tentacles.issues        :as issues]))
 
 (defn persons []
-  (selmer/render-file (path-to "persons.html")
-                      {:persons (person/find-all)}))
+  (layout/render "persons.html"
+                 {:persons (person/find-all)}))
 
 (defn a-person [id]
   (let [person (person/find-it id)]
-    (selmer/render-file (path-to "person.html")
-                        {:person person
-                         :issues (issues/issues "uclouvain" "osis-louvain")})))
+    (layout/render "person.html"
+                   {:person person
+                    :issues (issues/issues "uclouvain" "osis-louvain")})))
 
 (defn save-person [params]
   (let [person params]
     (if (b/valid? person person/validation-rules)
-      (selmer/render-file (path-to "persons.html")
-        {:person (person/save person)
-         :persons (person/find-all)})
-      (selmer/render-file (path-to "person_form.html")
-        {:person person}))))
+      (layout/render "persons.html"
+                     {:person (person/save person)
+                      :persons (person/find-all)})
+      (layout/render "person_form.html"
+                     {:person person}))))
 
 (defn person-form
-  ([]   (selmer/render-file (path-to "person_form.html") {}))
-  ([id] (selmer/render-file (path-to "person_form.html") {:person (person/find-it id)})))
+  ([]   (layout/render "person_form.html" {}))
+  ([id] (layout/render "person_form.html" {:person (person/find-it id)})))
 
 (defroutes routes
   (context "/persons" []

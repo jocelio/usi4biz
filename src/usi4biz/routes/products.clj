@@ -17,37 +17,36 @@
 (ns ^{:author "Hildeberto Mendonça - hildeberto.com"}
   usi4biz.routes.products
   (:require [compojure.core             :refer [defroutes context DELETE GET POST]]
-            [selmer.parser              :as selmer]
             [usi4biz.models.product     :as product]
+            [usi4biz.models.issue       :as issue]
             [usi4biz.models.issue-state :as issue-state]
             [usi4biz.models.milestone   :as milestone]
-            [usi4biz.utils.templates    :refer :all]
-            [bouncer.core               :as b]
-            [tentacles.issues           :as issues]
-            [tentacles.users            :as users]))
+            [usi4biz.views.layout       :as layout]
+            [bouncer.core               :as b]))
 
 (defn products []
-  (selmer/render-file (path-to "products.html")
-                      {:products (product/find-all)}))
+  (layout/render "products.html"
+                 {:products (product/find-all)}))
 
 (defn a-product [id]
-  (let [product (product/find-it id)]
-    (selmer/render-file (path-to "product.html")
-                        {:product product
-                         :issues  (issues/issues (users/user "htmfilho") (:repository product))})))
+  (let [product (product/find-it id)
+        issues  (issue/find-by-product product)]
+    (layout/render "product.html"
+                   {:product product
+                    :issues  issues})))
 
 (defn save-product [product]
   (if (b/valid? product product/validation-rules)
-    (selmer/render-file (path-to "products.html")
-                        {:product (product/save product)
-                         :products (product/find-all)})
-    (selmer/render-file (path-to "product_form.html")
-                        {:product product
-                         :error-name (first (:name (first (b/validate product product/validation-rules))))})))
+    (layout/render "products.html"
+                   {:product (product/save product)
+                    :products (product/find-all)})
+    (layout/render "product_form.html"
+                   {:product product
+                    :error-name (first (:name (first (b/validate product product/validation-rules))))})))
 
 (defn product-form
-  ([]   (selmer/render-file (path-to "product_form.html") {}))
-  ([id] (selmer/render-file (path-to "product_form.html") {:product (product/find-it id)})))
+  ([]   (layout/render "product_form.html" {}))
+  ([id] (layout/render "product_form.html" {:product (product/find-it id)})))
 
 (defn tabular-values []
   (map #(conj (val %) (key %))
@@ -62,17 +61,17 @@
 (defn presentation [product-id]
   (let [a-product           (first (product/find-it product-id))
         upcomming-milestone (first (milestone/upcomming-milestone))]
-    (selmer/render-file (path-to "presentation.html")
-      {:product                 (:acronym a-product)
-       :author                  "Hildeberto Mendonça, Ph.D."
-       :backlog-size            (:size (first (issue-state/backlog-size)))
-       :milestones              (map #(:name %) (milestone/find-by-product product-id))
-       :values                  (tabular-values)
-       :upcomming-milestone     (:name upcomming-milestone)
-       :total-planned-issues    (:total (first (issue-state/total-planned-issues (:id upcomming-milestone))))
-       :total-unplanned-issues  (:total (first (issue-state/total-unplanned-issues)))
-       :total-finished-issues   (:total (first (issue-state/total-finished-issues)))
-       :total-unfinished-issues (:total (first (issue-state/total-unfinished-issues)))})))
+    (layout/render "presentation.html"
+                   {:product                 (:acronym a-product)
+                    :author                  "Hildeberto Mendonça, Ph.D."
+                    :backlog-size            (:size (first (issue-state/backlog-size)))
+                    :milestones              (map #(:name %) (milestone/find-by-product product-id))
+                    :values                  (tabular-values)
+                    :upcomming-milestone     (:name upcomming-milestone)
+                    :total-planned-issues    (:total (first (issue-state/total-planned-issues (:id upcomming-milestone))))
+                    :total-unplanned-issues  (:total (first (issue-state/total-unplanned-issues)))
+                    :total-finished-issues   (:total (first (issue-state/total-finished-issues)))
+                    :total-unfinished-issues (:total (first (issue-state/total-unfinished-issues)))})))
 
 (defroutes routes
   (context "/products" []

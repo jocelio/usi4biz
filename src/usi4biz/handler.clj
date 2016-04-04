@@ -44,6 +44,18 @@
   (route/resources "/")
   (route/not-found "<h2>Not Found</h2>"))
 
+;(def app
+;   (handler/site (routes auth/routes
+;                         chart/routes
+;                         index/routes
+;                         products/routes
+;                         milestones/routes
+;                         issues/routes
+;                         persons/routes
+;                         user-accounts/routes
+;                         logs/routes
+;                         app-routes)))
+
 (def app
   (noir-middleware/app-handler [auth/routes
                                 chart/routes

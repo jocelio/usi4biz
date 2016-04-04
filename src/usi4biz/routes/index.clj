@@ -17,7 +17,6 @@
 (ns ^{:author "Hildeberto Mendonça - hildeberto.com"}
   usi4biz.routes.index
   (:require [compojure.core             :refer [defroutes GET]]
-            [selmer.parser              :as selmer]
             [usi4biz.models.product     :as product]
             [usi4biz.views.layout       :as layout]))
 

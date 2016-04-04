@@ -19,21 +19,20 @@
   (:require [compojure.core             :refer [defroutes context DELETE GET POST]]
             [liberator.core             :refer [defresource]]
             [clojure.data.json          :as json]
-            [selmer.parser              :as selmer]
             [usi4biz.models.milestone   :as milestone]
             [usi4biz.models.product     :as product]
-            [usi4biz.utils.templates    :refer :all]
+            [usi4biz.views.layout       :as layout]
             [usi4biz.datasource         :refer [format-date-db format-timestamp-db]]
             [bouncer.core               :as b]))
 
 (defn milestones [params]
-  (selmer/render-file (path-to "milestones.html")
+  (layout/render "milestones.html"
     {:products (product/find-all)
      :milestones (milestone/find-by-product (:product params))
      :selected-product (:product params)}))
 
 (defn milestone [id]
-      (selmer/render-file (path-to "milestone.html")
+      (layout/render "milestone.html"
         {:milestone (milestone/find-it id)}))
 
 (defn save-milestone [id product name description, start_sprint, start_sprint_time, due_date, type]
@@ -45,12 +44,12 @@
                    :due_date (format-date-db due_date "dd/MM/yyyy")
                    :type type}]
     (if (b/valid? milestone milestone/validation-rules)
-      (selmer/render-file (path-to "milestones.html")
+      (layout/render "milestones.html"
         {:milestone  (milestone/save milestone)
          :milestones (milestone/find-by-product product)
          :products (product/find-all)
          :selected-product (:product milestone)})
-      (selmer/render-file (path-to "milestone_form.html")
+      (layout/render "milestone_form.html"
         {:milestone milestone
          :products (product/find-all)
          :types milestone/types
@@ -64,7 +63,7 @@
 
 (defn milestone-form
   ([]   (milestone-form nil))
-  ([id] (selmer/render-file (path-to "milestone_form.html")
+  ([id] (layout/render "milestone_form.html"
           (let [response {:products (product/find-all)
                           :types milestone/types}]
             (if (nil? id)

@@ -23,11 +23,11 @@
                  [org.clojure/data.json      "0.2.6" ] ; Json library
 
                  ; Web
-                 [compojure                  "1.1.5" ] ; Routing library
+                 [compojure                  "1.4.0" ] ; Routing library
                  [ring-server                "0.3.1" ] ; Default web server
                  [liberator                  "0.13"  ] ; RESTful library
                  [http-kit                   "2.1.18"] ; High performance web server
-                 [selmer                     "0.6.5" ] ; Template engine
+                 [selmer                     "0.9.5" ] ; Template engine
                  [lib-noir                   "0.8.2" ] ; Utilities and helpers for ring apps
 
                  ; Database

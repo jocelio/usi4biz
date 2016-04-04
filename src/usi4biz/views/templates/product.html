@@ -1,6 +1,8 @@
 {% extends "usi4biz/views/templates/layout.html" %}
 {% block content %}
-<h2>Product</h2>
+<div class="page-header">
+  <h1>Product</h1>
+</div>
 <div class="panel panel-default">
   <div class="panel-body">
     <div class="row">
@@ -27,33 +29,52 @@
       <b>Description</b>
       <p>{{ product.description }}</p>
     </div>
-
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Issues</h3>
-      </div>
-      <div class="panel-body">
-        <table class="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th>Issue</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for issue in issues %}
-              <tr>
-                <td>{{ issue }}</td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </div>
   </div>
   <div class="panel-footer">
     <a href="/products/{{ product.id }}/form" class="btn btn-default"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>
     <a href="/products/{{ product.id }}/presentation" class="btn btn-info"><span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span> Start Presentation</a>
     <a href="#" class="btn btn-danger" id="remove"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove</a>
+  </div>
+</div>
+
+<div>
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#issues" aria-controls="issues" role="tab" data-toggle="tab">Issues</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="issues">
+      <div class="panel panel-default">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Title</th>
+              <th>Milestone</th>
+              <th>Created</th>
+              <th>By</th>
+              <th>Assignee</th>
+              <th>Updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for issue in issues %}
+            <tr>
+              <td>{{ issue.number }}</td>
+              <td>{{ issue.title }}</td>
+              <td>{{ issue.milestone.title }}</td>
+              <td>{{ issue.created_at|date:"dd/MM/yyyy" }}</td>
+              <td>{{ issue.user.login }}</td>
+              <td>{{ issue.assignee.login }}</td>
+              <td>{{ issue.updated_at|date:"dd/MM/yyyy" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
