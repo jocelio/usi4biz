@@ -39,8 +39,8 @@
 
                  ; Utils
                  [bouncer                    "0.3.3" ] ; Validation library
-                 [org.slf4j/slf4j-log4j12    "1.7.1" ] ; Logging library
                  [tentacles                  "0.5.1" ] ; work with the Github v3 API
+                 [org.slf4j/slf4j-log4j12    "1.7.1" ] ; Logging library
                  [log4j/log4j                "1.2.17"  ; Logging library
                   :exclusions [javax.mail/mail
                                javax.jms/jms
