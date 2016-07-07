@@ -16,7 +16,8 @@
 
 (ns ^{:author "Hildeberto Mendonça - hildeberto.com"}
   usi4biz.routes.auth
-  (:require [compojure.core              :refer [defroutes GET POST]]
+  (:require [bouncer.core                :as b]
+            [compojure.core              :refer [defroutes GET POST]]
             [noir.session                :as session]
             [noir.response               :as response]
             [usi4biz.views.layout        :as layout]

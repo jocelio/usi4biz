@@ -52,11 +52,12 @@
                               where i.id = ?" id]))))
 
 (defn find-by-product [a-product]
-  (let [repository (split (:repository a-product) #"/")]
-    (filter #(not (contains? % :pull_request))
-            (issues/issues (first repository)
-                           (last repository)
-                           {:auth (session/get :auth)}))))
+  (if (nil? a-product)
+    (let [repository (split (:repository a-product) #"/")]
+      (filter #(not (contains? % :pull_request))
+              (issues/issues (first repository)
+                             (last repository)
+                             {:auth (session/get :auth)})))))
 
 (defn search [params]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]
