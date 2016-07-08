@@ -29,7 +29,8 @@
             [usi4biz.routes.milestones    :as milestones]
             [usi4biz.routes.issues        :as issues]
             [usi4biz.routes.user-accounts :as user-accounts]
-            [usi4biz.routes.logs          :as logs]))
+            [usi4biz.routes.logs          :as logs]
+            [usi4biz.views.layout         :as layout]))
 
 (defn init []
   (println "Usi4Biz is starting...")
@@ -42,7 +43,7 @@
 
 (defroutes app-routes
   (route/resources "/")
-  (route/not-found "<h2>Not Found</h2>"))
+  (route/not-found (layout/render "not-found.html")))
 
 ;(def app
 ;   (handler/site (routes auth/routes
