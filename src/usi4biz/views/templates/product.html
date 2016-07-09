@@ -47,34 +47,32 @@
   <!-- Tab panes -->
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="issues">
-      <div class="panel panel-default">
-        <table class="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th>No.</th>
-              <th>Title</th>
-              <th>Milestone</th>
-              <th>Created</th>
-              <th>By</th>
-              <th>Assignee</th>
-              <th>Updated</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for issue in issues %}
-            <tr>
-              <td>{{ issue.number }}</td>
-              <td>{{ issue.title }}</td>
-              <td>{{ issue.milestone.title }}</td>
-              <td>{{ issue.created_at|date:"dd/MM/yyyy" }}</td>
-              <td>{{ issue.user.login }}</td>
-              <td>{{ issue.assignee.login }}</td>
-              <td>{{ issue.updated_at|date:"dd/MM/yyyy" }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>Title</th>
+            <th>Milestone</th>
+            <th>Created</th>
+            <th>By</th>
+            <th>Assignee</th>
+            <th>Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for issue in issues %}
+          <tr>
+            <td>{{ issue.number }}</td>
+            <td>{{ issue.title }}</td>
+            <td>{{ issue.milestone.title }}</td>
+            <td>{{ issue.created_at|date:"dd/MM/yyyy" }}</td>
+            <td>{{ issue.user.login }}</td>
+            <td>{{ issue.assignee.login }}</td>
+            <td>{{ issue.updated_at|date:"dd/MM/yyyy" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

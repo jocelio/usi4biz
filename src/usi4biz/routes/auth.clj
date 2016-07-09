@@ -43,7 +43,6 @@
    (let [user (user-account/find-by-username username)
          auth (str (:username user) ":" password)
          github-user (users/me {:auth auth})]
-     (println github-user)
      (if (:status github-user)
        (response/redirect "/login")
        (do
