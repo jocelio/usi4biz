@@ -36,3 +36,6 @@
     (let [repository a-repository]
       (jdbc/update! ds/db-spec :repository repository ["id = ?" (:id repository)])
       repository)))
+
+(defn delete [id]
+  (jdbc/delete! ds/db-spec :repository ["id = ?" id]) id)
