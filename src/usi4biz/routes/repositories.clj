@@ -23,8 +23,16 @@
             [usi4biz.models.issue-state :as issue-state]
             [usi4biz.models.milestone   :as milestone]
             [usi4biz.models.repository  :as repository]
+            [usi4biz.routes.products    :as products]
             [usi4biz.views.layout       :as layout]
             [bouncer.core               :as b]))
+
+(defn save-repository [a-repository]
+  (if (b/valid? a-repository repository/validation-rules)
+    (products/a-product (:product (repository/save a-repository)))
+    (products/a-product (:product a-repository)
+                        :error (first (:name (first (b/validate a-repository
+                                                                repository/validation-rules)))))))
 
 (defroutes routes
   (context "/repositories" []
