@@ -26,6 +26,7 @@
             [usi4biz.routes.index         :as index]
             [usi4biz.routes.persons       :as persons]
             [usi4biz.routes.products      :as products]
+            [usi4biz.routes.repositories  :as repositories]
             [usi4biz.routes.milestones    :as milestones]
             [usi4biz.routes.issues        :as issues]
             [usi4biz.routes.user-accounts :as user-accounts]
@@ -62,6 +63,7 @@
                                 chart/routes
                                 index/routes
                                 products/routes
+                                repositories/routes
                                 milestones/routes
                                 issues/routes
                                 persons/routes

@@ -33,7 +33,7 @@
 (defn a-product [id]
   (let [product      (product/find-it id)
         repositories (map #(assoc % :issues (issue/find-by-repository % (session/get :auth)))
-                          (repository/ product))]
+                          (repository/find-by-product product))]
     (layout/render "product.html"
                    {:product      product
                     :repositories repositories})))
@@ -68,7 +68,7 @@
                    {:product                 (:acronym a-product)
                     :author                  "Hildeberto Mendonça, Ph.D."
                     :backlog-size            (:size (first (issue-state/backlog-size)))
-                    :milestones              (map #(:name %) (milestone/ product-id))
+                    :milestones              (map #(:name %) (milestone/find-by-product product-id))
                     :values                  (tabular-values)
                     :upcomming-milestone     (:name upcomming-milestone)
                     :total-planned-issues    (:total (first (issue-state/total-planned-issues (:id upcomming-milestone))))
