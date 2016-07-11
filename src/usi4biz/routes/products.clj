@@ -30,13 +30,14 @@
   (layout/render "products.html"
                  {:products (product/find-all)}))
 
-(defn a-product [id]
+(defn a-product [id & {:keys [error]}]
   (let [product      (product/find-it id)
         repositories (map #(assoc % :issues (issue/find-by-repository % (session/get :auth)))
                           (repository/find-by-product product))]
     (layout/render "product.html"
                    {:product      product
-                    :repositories repositories})))
+                    :repositories repositories
+                    :error        error})))
 
 (defn save-product [product]
   (if (b/valid? product product/validation-rules)
