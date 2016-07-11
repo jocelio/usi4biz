@@ -17,10 +17,12 @@
 (ns ^{:author "Hildeberto Mendonça - hildeberto.com"}
   usi4biz.routes.products
   (:require [compojure.core             :refer [defroutes context DELETE GET POST]]
+            [noir.session               :as session]
             [usi4biz.models.product     :as product]
             [usi4biz.models.issue       :as issue]
             [usi4biz.models.issue-state :as issue-state]
             [usi4biz.models.milestone   :as milestone]
+            [usi4biz.models.repository  :as repository]
             [usi4biz.views.layout       :as layout]
             [bouncer.core               :as b]))
 
@@ -29,11 +31,12 @@
                  {:products (product/find-all)}))
 
 (defn a-product [id]
-  (let [product (product/find-it id)
-        issues  (issue/find-by-product product)]
+  (let [product      (product/find-it id)
+        repositories (map #(assoc % :issues (issue/find-by-repository % (session/get :auth)))
+                          (repository/ product))]
     (layout/render "product.html"
-                   {:product product
-                    :issues  issues})))
+                   {:product      product
+                    :repositories repositories})))
 
 (defn save-product [product]
   (if (b/valid? product product/validation-rules)
@@ -65,7 +68,7 @@
                    {:product                 (:acronym a-product)
                     :author                  "Hildeberto Mendonça, Ph.D."
                     :backlog-size            (:size (first (issue-state/backlog-size)))
-                    :milestones              (map #(:name %) (milestone/find-by-product product-id))
+                    :milestones              (map #(:name %) (milestone/ product-id))
                     :values                  (tabular-values)
                     :upcomming-milestone     (:name upcomming-milestone)
                     :total-planned-issues    (:total (first (issue-state/total-planned-issues (:id upcomming-milestone))))

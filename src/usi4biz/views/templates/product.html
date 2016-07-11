@@ -1,33 +1,23 @@
 {% extends "usi4biz/views/templates/layout.html" %}
 {% block content %}
 <div class="page-header">
-  <h1>Product</h1>
+  <h1>{{ product.acronym }}</h1>
 </div>
 <div class="panel panel-default">
   <div class="panel-body">
     <div class="row">
       <div class="col-md-3">
         <div class="form-group">
-          <b>Acronym</b>
-          <p>{{ product.acronym }}</p>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="form-group">
           <b>Name</b>
           <p>{{ product.name }}</p>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-9">
         <div class="form-group">
-          <b>Repository</b>
-          <p>{{ product.repository }}</p>
+          <b>Description</b>
+          <p>{{ product.description }}</p>
         </div>
       </div>
-    </div>
-    <div class="form-group">
-      <b>Description</b>
-      <p>{{ product.description }}</p>
     </div>
   </div>
   <div class="panel-footer">
@@ -37,44 +27,122 @@
   </div>
 </div>
 
-{% if issues|not-empty %}
 <div>
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#issues" aria-controls="issues" role="tab" data-toggle="tab">Issues</a></li>
+    <li role="presentation" class="active">
+      <a href="#repositories" aria-controls="repositories" role="tab" data-toggle="tab">Repositories <span class="badge">{{ repositories|length }}</span></a>
+    </li>
   </ul>
 
   <!-- Tab panes -->
   <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="issues">
-      <table class="table table-striped table-hover">
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>Title</th>
-            <th>Milestone</th>
-            <th>Created</th>
-            <th>By</th>
-            <th>Assignee</th>
-            <th>Updated</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for issue in issues %}
-          <tr>
-            <td>{{ issue.number }}</td>
-            <td>{{ issue.title }}</td>
-            <td>{{ issue.milestone.title }}</td>
-            <td>{{ issue.created_at|date:"dd/MM/yyyy" }}</td>
-            <td>{{ issue.user.login }}</td>
-            <td>{{ issue.assignee.login }}</td>
-            <td>{{ issue.updated_at|date:"dd/MM/yyyy" }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+    <div role="tabpanel" class="tab-pane active" id="repositories">
+      <div class="row">
+        <div class="col-md-3">
+          <br>
+          <ul class="nav nav-pills nav-stacked">
+            {% for repository in repositories %}
+              <li role="presentation"><a href="#{{ repository.user }}-{{ repository.name }}" aria-controls="{{ repository.user }}-{{ repository.name }}" role="tab" data-toggle="tab">{{ repository.user }}/{{ repository.name }}</a></li>
+            {% endfor %}
+          </ul>
+          <br>
+          <button type="button" class="btn btn-default" data-toggle="modal" data-target="#repositoryModal">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+          </button>
+        </div>
+
+        <div class="col-md-9">
+          <div class="tab-content">
+            {% for repository in repositories %}
+              <div role="tabpanel" class="tab-pane" id="{{ repository.user }}-{{ repository.name }}">
+                <h3><a href="https://github.com/{{ repository.user }}/{{ repository.name }}" target="_blank">{{ repository.user }}/{{ repository.name }}</a></h3>
+                <ul class="nav nav-tabs" role="tablist">
+                  <li role="presentation" class="active">
+                    <a href="#issues" aria-controls="issues" role="tab" data-toggle="tab">Issues <span class="badge">{{ repository.issues|length }}</span></a>
+                  </li>
+                </ul>
+
+                <div class="tab-content">
+                  <div role="tabpanel" class="tab-pane active" id="issues">
+                    <table class="table table-striped table-hover">
+                      <thead>
+                        <tr>
+                          <th>No.</th>
+                          <th>Title</th>
+                          <th>Milestone</th>
+                          <th>By</th>
+                          <th>Assignee</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for issue in repository.issues %}
+                        <tr>
+                          <td>{{ issue.number }}</td>
+                          <td>{{ issue.title }}</td>
+                          <td>{{ issue.milestone.title }}</td>
+                          <td>{{ issue.user.login }}</td>
+                          <td>{{ issue.assignee.login }}</td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-{% endif %}
+
+<div class="modal fade" id="repositoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">New Repository For {{ product.acronym }}</h4>
+      </div>
+      <form method="post" action="/repositories">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="repository-user" class="control-label">User</label>
+                <input type="text" class="form-control" id="repository-user" name="user">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="repository-name" class="control-label">Name</label>
+                <input type="text" class="form-control" id="repository-name" name="name">
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">URL</label><br>
+            <spam id="url"></spam>
+          </div>
+          <input type="hidden" name="product" value="{{ product.id }}">
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+  $("#repository-user").on('input', function() {
+        $('#url').text("https://github.com/" + $(this).val() + "/" + $('#repository-name').val());
+  });
+
+  $("#repository-name").on('input', function() {
+        $('#url').text("https://github.com/" + $('#repository-user').val() + "/" + $(this).val());
+  });
+</script>
 {% endblock %}
