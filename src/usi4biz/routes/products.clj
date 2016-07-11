@@ -17,10 +17,12 @@
 (ns ^{:author "Hildeberto Mendonça - hildeberto.com"}
   usi4biz.routes.products
   (:require [compojure.core             :refer [defroutes context DELETE GET POST]]
+            [noir.session               :as session]
             [usi4biz.models.product     :as product]
             [usi4biz.models.issue       :as issue]
             [usi4biz.models.issue-state :as issue-state]
             [usi4biz.models.milestone   :as milestone]
+            [usi4biz.models.repository  :as repository]
             [usi4biz.views.layout       :as layout]
             [bouncer.core               :as b]))
 
@@ -28,12 +30,14 @@
   (layout/render "products.html"
                  {:products (product/find-all)}))
 
-(defn a-product [id]
-  (let [product (product/find-it id)
-        issues  (issue/find-by-product product)]
+(defn a-product [id & {:keys [error]}]
+  (let [product      (product/find-it id)
+        repositories (map #(assoc % :issues (issue/find-by-repository % (session/get :auth)))
+                          (repository/find-by-product product))]
     (layout/render "product.html"
-                   {:product product
-                    :issues  issues})))
+                   {:product      product
+                    :repositories repositories
+                    :error        error})))
 
 (defn save-product [product]
   (if (b/valid? product product/validation-rules)
