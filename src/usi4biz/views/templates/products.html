@@ -22,7 +22,6 @@
         <th>Acronym</th>
         <th>Name</th>
         <th>Description</th>
-        <th>Repository</th>
       </tr>
     </thead>
     <tbody>
@@ -31,7 +30,6 @@
         <td>{{ product.acronym }}</td>
         <td><a href="/products/{{ product.id }}">{{ product.name }}</a></td>
         <td>{{ product.description }}</td>
-        <td>{{ product.repository }}</td>
       </tr>
       {% endfor %}
     </tbody>

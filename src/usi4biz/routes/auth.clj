@@ -16,12 +16,26 @@
 
 (ns ^{:author "Hildeberto Mendonça - hildeberto.com"}
   usi4biz.routes.auth
-  (:require [compojure.core              :refer [defroutes GET POST]]
+  (:require [bouncer.core                :as b]
+            [compojure.core              :refer [defroutes GET POST]]
             [noir.session                :as session]
             [noir.response               :as response]
             [usi4biz.views.layout        :as layout]
             [tentacles.users             :as users]
+            [usi4biz.models.person       :as person]
             [usi4biz.models.user-account :as user-account]))
+
+(defn signup
+  ([] (layout/render "signup.html" {}))
+  ([params]
+    (let [user-account (select-keys params [:username])
+          person       (select-keys params [:first_name :last_name :email])]
+      (if (and (b/valid? user-account user-account/validation-rules)
+               (b/valid? person person/validation-rules))
+        (response/redirect "/login")
+        (layout/render "signup.html"
+                       {:user-account user-account
+                        :person       person})))))
 
 (defn login
   ([] (layout/render "login.html" {}))
@@ -29,7 +43,6 @@
    (let [user (user-account/find-by-username username)
          auth (str (:username user) ":" password)
          github-user (users/me {:auth auth})]
-     (println github-user)
      (if (:status github-user)
        (response/redirect "/login")
        (do
@@ -42,6 +55,8 @@
   (response/redirect "/"))
 
 (defroutes routes
-  (GET  "/login"  []        (login))
+  (GET  "/signup" []                  (signup))
+  (POST "/signup" {params :params}    (signup params))
+  (GET  "/login"  []                  (login))
   (POST "/login"  [username password] (login username password))
-  (GET  "/logout" []        (logout)))
+  (GET  "/logout" []                  (logout)))

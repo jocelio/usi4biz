@@ -22,8 +22,7 @@
             [usi4biz.datasource         :as ds]
             [usi4biz.models.issue-state :as iss]
             [bouncer.validators         :as v]
-            [tentacles.issues           :as issues]
-            [noir.session               :as session]))
+            [tentacles.issues           :as issues]))
 
 (def assigning-types {; as result of the sprint meeting
                       :PLANNED            "PLANNED"
@@ -51,12 +50,11 @@
                                            join person a on i.assignee = a.id
                               where i.id = ?" id]))))
 
-(defn find-by-product [a-product]
-  (let [repository (split (:repository a-product) #"/")]
-    (filter #(not (contains? % :pull_request))
-            (issues/issues (first repository)
-                           (last repository)
-                           {:auth (session/get :auth)}))))
+(defn find-by-repository [a-repository auth]
+  (filter #(not (contains? % :pull_request))
+          (issues/issues (:user a-repository)
+                         (:name a-repository)
+                         {:auth auth :per-page 100})))
 
 (defn search [params]
   (jdbc/with-db-connection [conn {:datasource ds/datasource}]

@@ -20,7 +20,8 @@
             [usi4biz.models.person   :as person]
             [usi4biz.views.layout    :as layout]
             [bouncer.core            :as b]
-            [tentacles.issues        :as issues]))
+            [tentacles.issues        :as issues]
+            [noir.session            :as session]))
 
 (defn persons []
   (layout/render "persons.html"
@@ -30,7 +31,8 @@
   (let [person (person/find-it id)]
     (layout/render "person.html"
                    {:person person
-                    :issues (issues/issues "uclouvain" "osis-louvain")})))
+                    :issues (issues/issues "uclouvain" "osis" {:auth     (session/get :auth)
+                                                               :assignee (:username person)})})))
 
 (defn save-person [params]
   (let [person params]
