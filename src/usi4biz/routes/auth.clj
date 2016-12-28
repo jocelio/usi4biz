@@ -26,14 +26,14 @@
             [usi4biz.models.user-account :as user-account]))
 
 (defn signup
-  ([] (layout/render "signup.html" {}))
+  ([] (layout/render "sign_up.html" {}))
   ([params]
     (let [user-account (select-keys params [:username])
           person       (select-keys params [:first_name :last_name :email])]
       (if (and (b/valid? user-account user-account/validation-rules)
                (b/valid? person person/validation-rules))
         (response/redirect "/login")
-        (layout/render "signup.html"
+        (layout/render "sign_up.html"
                        {:user-account user-account
                         :person       person})))))
 
